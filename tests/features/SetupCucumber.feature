@@ -5,4 +5,4 @@ Feature: Setup Cucumber.js
 
   Scenario: Visiting the home page
     Given I am on the home page
-    Then I should see "Livro de Receitas"
+    Then I should see "Livro de Receitas" at the "body"

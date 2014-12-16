@@ -5,12 +5,45 @@ var sharedSteps = function(){
     this.visit('/', next);
   });
 
-  this.Then(/^I should see "([^"]*)"$/, function(text, next) {
+  this.Then(/^I should see "([^"]*)" at the "([^"]*)"$/, function(text, location, next) {
     this.browser.elementByCss('body', function (err, el) {
-      el.text(function(err, actualText) {
-        actualText.should.containEql(text);
+      if(err)
+      {
+        next.fail();
+      }
+      else
+      {
+        if(text !== '')
+        {
+          el.text(function (err, actualText) {
+            if (err)
+            {
+              next.fail();
+            }
+            else
+            {
+              actualText.should.containEql(text);
+              next();
+            }
+          });
+        }
+        else {
+          next();
+        }
+      }
+    });
+  });
+
+  this.Then(/^I should see a "([^"]*)"$/, function(location, next) {
+    this.browser.elementByCss(location, function (err) {
+      if(err)
+      {
+        next.fail();
+      }
+      else
+      {
         next();
-      });
+      }
     });
   });
 };
