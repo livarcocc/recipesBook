@@ -9,6 +9,8 @@ var sharedSteps = module.exports = function(){
     this.browser.elementByCss('body', function (err, el) {
       el.text(function(err, actualText) {
         actualText.should.containEql(text);
+        next();
+        this.browser.quit();
       });
     });
   });

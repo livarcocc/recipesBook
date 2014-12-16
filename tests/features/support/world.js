@@ -20,7 +20,7 @@ module.exports = function() {
     this.browser = browser;
 
     this.page = function (path) {
-      return "http://localhost:" + server.app.address().port + path
+      return "http://localhost:" + server.app.get('port') + path
     };
 
     this.visit = function (url, callback) {
