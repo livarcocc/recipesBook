@@ -3,12 +3,12 @@ var express = require('express'),
   path = require('path'),
   logger = require('morgan'),
   bodyParser = require('body-parser'),
-  less = require('less-middleware');
-//  mongoose = require('mongoose');
+  less = require('less-middleware'),
+  mongoose = require('mongoose');
 
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-//var config = require('./config')[env];
+var config = require('./config')[env];
 
 var app = express();
 
@@ -25,14 +25,14 @@ app.get('/partials/:partialPath', function (req, res) {
   res.render(path.join('partials', req.params.partialPath));
 });
 
-//mongoose.connect(config.db);
-//var db = mongoose.connection;
-//
-//db.on('error', console.error.bind(console, 'mongo connection error.'));
-//
-//db.once('open', function callback() {
-//  console.log('mongo db connection open');
-//});
+mongoose.connect(config.db);
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'mongo connection error.'));
+
+db.once('open', function callback() {
+  console.log('mongo db connection open');
+});
 
 app.get('*', function(req, res) {
   res.render('index');
