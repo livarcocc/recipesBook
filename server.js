@@ -21,6 +21,10 @@ app.use(bodyParser.json());
 app.use(less(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/partials/:partialPath', function (req, res) {
+  res.render(path.join('partials', req.params.partialPath));
+});
+
 //mongoose.connect(config.db);
 //var db = mongoose.connection;
 //
