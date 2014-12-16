@@ -1,5 +1,5 @@
-var sharedSteps = module.exports = function(){
-  this.World = require('../support/world');
+var sharedSteps = function(){
+  this.World = require('../support/world').World;
 
   this.Given(/^I am on the home page$/, function(next) {
     this.visit('/', next);
@@ -10,8 +10,9 @@ var sharedSteps = module.exports = function(){
       el.text(function(err, actualText) {
         actualText.should.containEql(text);
         next();
-        this.browser.quit();
       });
     });
   });
-}
+};
+
+module.exports = sharedSteps;
