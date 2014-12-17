@@ -9,13 +9,13 @@ var express = require('express'),
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(process.env.PWD, 'server/views'));
+app.set('views', path.join(__dirname, 'server/views'));
 app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(less(path.join(process.env.PWD, 'public')));
-app.use(express.static(path.join(process.env.PWD, 'public')));
+app.use(less(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 setupMongo();
 
