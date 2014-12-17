@@ -8,6 +8,10 @@
     "start": "node server.js",
     "start-phantom": "phantomjs --webdriver=4444"
   },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.4.x"
+  },
   "author": "Livar Cunha (livar@live.com)",
   "license": "ISC",
   "dependencies": {

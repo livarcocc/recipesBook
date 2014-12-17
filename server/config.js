@@ -6,6 +6,6 @@ module.exports = {
     db: 'mongodb://localhost/recipesBook-test'
   },
   production: {
-    db: 'mongodb://localhost/recipesBook'
+    db: 'mongodb://licavalc:<dbpassword>@ds027751.mongolab.com:27751/recipesbook'
   }
 };
