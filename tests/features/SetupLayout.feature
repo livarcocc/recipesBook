@@ -5,6 +5,6 @@ Feature: Setup Layout
 
   Scenario: Visiting the home page
     Given I am on the home page
-    Then I should see a "header"
-    And I should see a "main area"
+    Then I should see a "div.navbar"
+    And I should see a "section.content"
     And I should see a "footer"
