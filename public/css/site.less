@@ -1,5 +1,28 @@
+@import "variables.less";
+
 body {
   padding-top: 61px;
+
+  color: @linkColor;
+  background-color: #d8d8d8;
+}
+
+.jumbotron {
+  background-color: #ffffff;
+}
+
+.navbar {
+  background-color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+}
+
+.navbar-header a.navbar-brand, .navbar-inverse .navbar-nav li a {
+  color: @linkColor;
+
+  &:hover {
+    color: @hoverColor;
+  }
 }
 
 .navbar-header a.navbar-brand {
