@@ -1,34 +1,20 @@
 var express = require('express'),
-  http = require('http'),
-  path = require('path'),
-  logger = require('morgan'),
-  bodyParser = require('body-parser'),
-  less = require('less-middleware'),
-  setupMongo = require('./server/mongo.js');
+  http = require('http');
 
 var app = express();
 
-app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'server/views'));
-app.set('view engine', 'jade');
-app.use(logger('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(less(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-setupMongo();
+var config = require('./server/config/config.js')[env];
 
-app.get('/partials/*', function (req, res) {
-  res.render(path.join('../../public/app/', req.params[0]));
-});
+require('./server/config/express.js')(app, config);
 
-app.get('*', function(req, res) {
-  res.render('index');
-});
+require('./server/config/mongo.js')(config);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+require('./server/config/routes.js')(app);
+
+http.createServer(app).listen(config.port, function(){
+  console.log('Express server listening on port ' + config.port);
 });
 
 module.exports = {

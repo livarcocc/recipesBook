@@ -1,10 +1,6 @@
-var setupMongo = function () {
-  var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 
-  var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-
-  var config = require('./config')[env];
-
+module.exports = function (config) {
   mongoose.connect(config.db);
   var db = mongoose.connection;
 
@@ -14,5 +10,3 @@ var setupMongo = function () {
     console.log('mongo db connection open');
   });
 };
-
-module.exports = setupMongo;
