@@ -19,8 +19,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 setupMongo();
 
-app.get('/partials/:partialPath', function (req, res) {
-  res.render(path.join('partials', req.params.partialPath));
+app.get('/partials/*', function (req, res) {
+  res.render(path.join('../../public/app/', req.params[0]));
 });
 
 app.get('*', function(req, res) {
