@@ -4,5 +4,5 @@ Feature: Setup Cucumber.js
   So that I end up with the right functionalities
 
   Scenario: Visiting the home page
-    Given I am on the home page
+    Given I am on the home page unauthenticated
     Then I should see "Livro de Receitas" at the "body"

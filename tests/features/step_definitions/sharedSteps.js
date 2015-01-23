@@ -1,27 +1,23 @@
-var sharedSteps = function(){
+var sharedSteps = function () {
   this.World = require('../support/world').World;
 
-  this.Given(/^I am on the home page$/, function(next) {
+  this.Given(/^I am on the home page unauthenticated$/, function (next) {
     this.visit('/', next);
+    //TODO-licavalc: deal with the authenticated/unauthenticated part of the step
   });
 
-  this.Then(/^I should see "([^"]*)" at the "([^"]*)"$/, function(text, location, next) {
-    this.browser.elementByCss('body', function (err, el) {
-      if(err)
-      {
+  this.Then(/^I should see "([^"]*)" at the "([^"]*)"$/, function (text, location, next) {
+    this.browser.elementByCss(location, function (err, el) {
+      if (err) {
         next.fail();
       }
-      else
-      {
-        if(text !== '')
-        {
+      else {
+        if (text !== '') {
           el.text(function (err, actualText) {
-            if (err)
-            {
+            if (err) {
               next.fail();
             }
-            else
-            {
+            else {
               actualText.should.containEql(text);
               next();
             }
@@ -34,14 +30,15 @@ var sharedSteps = function(){
     });
   });
 
-  this.Then(/^I should see a "([^"]*)"$/, function(location, next) {
+  this.Then(/^I should (not )?see an element "([^"]*)"$/, function (negate, location, next) {
     this.browser.elementByCss(location, function (err) {
-      if(err)
-      {
+      if (negate && !err) {
         next.fail();
       }
-      else
-      {
+      else if (err) {
+        next.fail();
+      }
+      else {
         next();
       }
     });
