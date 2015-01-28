@@ -14,7 +14,7 @@ Feature: Login from home page
     And I have entered "login" at "input[placeholder='Email']"
     And I have entered "password" at "input[placeholder='Password']"
     When I click "button[name='login']"
-    Then I login
+    Then I should see an element "a[name='logout']"
 
   Scenario: Login fails when invalid credentials are entered and user is redirected to login page
     Given I am on the home page unauthenticated

@@ -43,6 +43,34 @@ var sharedSteps = function () {
       }
     });
   });
+
+  this.Then(/^I have entered "([^"]*)" at "([^"]*)"$/, function (value, location, next) {
+    this.browser.elementByCss(location, function (err, el) {
+      if (err) {
+        next.fail();
+      }
+      else {
+        el.click(function () {
+          el.sendKeys(value, function () {
+            next();
+          });
+        });
+      }
+    });
+  });
+
+  this.Then(/^I click "([^"]*)"$/, function (location, next) {
+    this.browser.elementByCss(location, function (err, el) {
+      if (err) {
+        next.fail();
+      }
+      else {
+        el.click(function () {
+          next();
+        });
+      }
+    });
+  });
 };
 
 module.exports = sharedSteps;

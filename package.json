@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "start-phantom": "phantomjs --webdriver=4444"
+    "start-phantom": "phantomjs --webdriver=4444",
+    "coverage": "node node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 5000 tests/server"
   },
   "engines": {
     "node": "0.10.x",
@@ -16,11 +17,16 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.10.0",
+    "crypto": "0.0.3",
     "express": "^4.10.4",
+    "istanbul": "^0.3.5",
     "jade": "^1.8.1",
     "less-middleware": "^1.0.4",
+    "lodash": "^3.0.0",
     "mongoose": "^3.8.20",
-    "morgan": "^1.5.0"
+    "morgan": "^1.5.0",
+    "passport": "^0.2.1",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "bower": "^1.3.12",

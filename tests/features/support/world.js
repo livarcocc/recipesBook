@@ -1,18 +1,28 @@
 var HTML5  = require('html5')
   , should = require('should')
   , server = require('../../../server')
-  , wd = require('wd');
+  , wd = require('wd')
+  , mongoose = require('mongoose')
+  , Account = mongoose.model('Account');
+
+Account.find({
+  userName: 'login'
+}).exec(function (err, accounts) {
+  if(accounts.length === 0) {
+    Account.create({firstName: 'test', lastName: 'account', userName: 'login'});
+  }
+});
 
 var browser = wd.remote();
 
 // log status output from web driver
 browser.on('status', function(info){
-  console.log('\x1b[36m%s\x1b[0m', info);
+//  console.log('\x1b[36m%s\x1b[0m', info);
 });
 
 // log commands from web driver
 browser.on('command', function(meth, path, data){
-  console.log(' > \x1b[33m%s\x1b[0m: %s', meth, path, data || '');
+//  console.log(' > \x1b[33m%s\x1b[0m: %s', meth, path, data || '');
 });
 
 var getBrowser = function () {
