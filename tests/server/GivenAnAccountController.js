@@ -1,0 +1,127 @@
+'use strict';
+
+var chai = require('chai'),
+  sinon = require('sinon'),
+  sinonChai = require("sinon-chai");
+
+chai.should();
+chai.use(sinonChai);
+
+describe('The Account controller', function () {
+  var accountController,
+      authenticateCallback,
+      info = 'info',
+      passportSpy = {
+        authenticate: undefined
+      },
+      request,
+      response,
+      user = {
+        password: 'password',
+        salt: 'salt'
+      };
+
+  before(function (done) {
+    request = {
+      login: sinon.spy()
+    };
+
+    response = {
+      status: sinon.stub(),
+      send: sinon.stub(),
+      json: sinon.spy()
+    };
+
+    response.status.returns(response);
+
+    authenticateCallback = sinon.spy();
+
+    passportSpy.authenticate = sinon.stub().returns(authenticateCallback);
+
+    accountController = require('../../server/account/accountController.js')(passportSpy);
+
+    done();
+  });
+
+  describe('signin', function() {
+    it('calls passport.authenticateCallback with local strategy', function (done) {
+      accountController.signin();
+
+      passportSpy.authenticate.should.have.been.calledWith('local');
+
+      done();
+    });
+
+    it('immediately invokes the function returned by passport.authenticateCallback', function (done) {
+      var req = 'req',
+          res = 'res',
+          next = function (){};
+
+      accountController.signin(req, res, next);
+
+      authenticateCallback.should.have.been.calledWith(req, res, next);
+
+      done();
+    });
+
+    it('returns 400 when there is an error when authenticating', function (done) {
+      passportSpy.authenticate = sinon.stub().callsArgWith(1, 'err', undefined, info).returns(authenticateCallback);
+
+      accountController.signin(request, response, response);
+
+      response.status.should.have.been.calledWith(400);
+      response.send.should.have.been.calledWith(info);
+
+      done();
+    });
+
+    it('returns 400 when no user is returned', function (done) {
+      passportSpy.authenticate = sinon.stub().callsArgWith(1, undefined, undefined, info).returns(authenticateCallback);
+
+      accountController.signin(request, response, response);
+
+      response.status.should.have.been.calledWith(400);
+      response.send.should.have.been.calledWith(info);
+
+      done();
+    });
+
+    it('removes user.password and user.salt when invoking req.login', function (done) {
+      var userWithoutPassord = {
+        password: undefined,
+        salt: undefined
+      };
+
+      passportSpy.authenticate = sinon.stub().callsArgWith(1, undefined, user, info).returns(authenticateCallback);
+
+      accountController.signin(request, response, response);
+
+      request.login.should.have.been.calledWith(userWithoutPassord);
+
+      done();
+    });
+
+    it('returns 400 when there is an error during req.login', function (done) {
+      var err = 'err';
+      request.login = sinon.stub().callsArgWith(1, err);
+
+      accountController.signin(request, response, response);
+
+      response.status.should.have.been.calledWith(400);
+      response.send.should.have.been.calledWith(err);
+
+      done();
+    });
+
+    it('sends the user back as json when signin succeeds', function (done) {
+      var err = 'err';
+      request.login = sinon.stub().callsArgWith(1, undefined);
+
+      accountController.signin(request, response, response);
+
+      response.json.should.have.been.calledWith(user);
+
+      done();
+    });
+  });
+});

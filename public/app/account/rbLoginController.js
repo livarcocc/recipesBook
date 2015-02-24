@@ -1,5 +1,11 @@
-angular.module('recipesBook').controller("rbLoginController", function($scope) {
+angular.module(ApplicationConfiguration.applicationModuleName).controller("rbLoginController", function($scope, $http) {
   $scope.login = function(username, password) {
-    console.log('not yet');
+    $http.post('/auth/signin', {username: username, password: password}).
+      success(function() {
+        $scope.logged = true;
+      }).
+      error(function(response) {
+        $scope.error = response.message;
+      });
   };
 });

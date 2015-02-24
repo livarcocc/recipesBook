@@ -11,6 +11,8 @@ require('./server/config/express.js')(app, config);
 
 require('./server/config/mongo.js')(config);
 
+require('./server/config/passport.js')();
+
 require('./server/config/routes.js')(app);
 
 http.createServer(app).listen(config.port, function(){
