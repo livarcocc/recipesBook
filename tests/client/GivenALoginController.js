@@ -3,41 +3,69 @@
 describe('The Login controller', function () {
   var loginController,
       scope,
-      $httpBackend,
-      $location;
+      rbIdentity,
+      rbAuthentication,
+      rbNotifier,
+      deferred;
 
   beforeEach(module(ApplicationConfiguration.applicationModuleName));
 
   beforeEach(
-    inject(function($controller, $rootScope, _$httpBackend_, _$location_) {
+    inject(function($controller, $rootScope) {
       scope = $rootScope.$new();
 
-      $httpBackend = _$httpBackend_;
-      $location = _$location_;
+      rbIdentity = 'identityService';
+
+      rbNotifier = {
+        success: sinon.spy(),
+        error: sinon.spy()
+      };
+
+      deferred = {
+        then: function(success, error) {
+          this.success = success;
+          this.error = error;
+        }
+      };
+      rbAuthentication = {
+        authenticate: sinon.stub()
+      };
+
+      rbAuthentication.authenticate.returns(deferred);
 
       loginController = $controller('rbLoginController', {
-        $scope: scope
+        $scope: scope,
+        rbIdentity: rbIdentity,
+        rbNotifier: rbNotifier,
+        rbAuthentication: rbAuthentication
       });
     }));
 
   describe('Login', function () {
+    it('sets the identity service in the $scope', function () {
+      scope.login();
+
+      scope.identity.should.equal(rbIdentity);
+    });
+
     it('should login with a correct user and password', function() {
-      $httpBackend.when('POST', '/auth/signin',{username: 'username', password: 'password'}).respond(200, 'username');
-
       scope.login('username', 'password');
-      $httpBackend.flush();
 
-      scope.logged.should.be.true;
+      deferred.success();
+
+      rbAuthentication.authenticate.should.have.been.calledWith('username', 'password');
+      rbNotifier.success.should.have.been.calledWith('You have successfully signed in.');
     });
 
     it('should fail to login with no parameters', function() {
       var message = 'Missing credentials';
-      $httpBackend.expectPOST('/auth/signin').respond(400, {'message': message});
 
       scope.login();
-      $httpBackend.flush();
 
-      scope.error.should.equal(message);
+      deferred.error(message);
+
+      rbAuthentication.authenticate.should.have.been.calledWith();
+      rbNotifier.error.should.have.been.calledWith(message);
     });
 
     it('should fail to login with invalid credentials', function() {
@@ -45,13 +73,12 @@ describe('The Login controller', function () {
       var invalidUsername = 'invalidUsername';
       var invalidPassword = 'invalidPassword';
 
-      $httpBackend.when('POST', '/auth/signin',{username: invalidUsername, password: invalidPassword})
-        .respond(400, {'message': message});
-
       scope.login(invalidUsername, invalidPassword);
-      $httpBackend.flush();
 
-      scope.error.should.equal(message);
+      deferred.error(message);
+
+      rbAuthentication.authenticate.should.have.been.calledWith(invalidUsername, invalidPassword);
+      rbNotifier.error.should.have.been.calledWith(message);
     });
   });
 });

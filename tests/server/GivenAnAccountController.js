@@ -119,7 +119,7 @@ describe('The Account controller', function () {
 
       accountController.signin(request, response, response);
 
-      response.json.should.have.been.calledWith(user);
+      response.json.should.have.been.calledWith({data: user});
 
       done();
     });

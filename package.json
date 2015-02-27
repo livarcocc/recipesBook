@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "start-phantom": "phantomjs --webdriver=4444",
+    "start-phantom": "node_modules/phantomjs/lib/phantom/phantomjs --webdriver=4444",
     "coverage": "node node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 5000 tests/server"
   },
   "engines": {
@@ -25,7 +25,7 @@
     "jade": "^1.8.1",
     "less-middleware": "^1.0.4",
     "lodash": "^3.0.0",
-    "mongoose": "^3.8.20",
+    "mongoose": "^3.8.24",
     "morgan": "^1.5.0",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0"
@@ -43,6 +43,7 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-requirejs": "^0.2.2",
     "karma-sinon": "^1.0.4",
+    "karma-sinon-chai": "^0.3.0",
     "mocha": "~1.14.0",
     "phantomjs": "^1.9.12",
     "request": "~2.27.0",
