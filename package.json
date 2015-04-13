@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "start-phantom": "node_modules/phantomjs/lib/phantom/phantomjs --webdriver=4444",
+    "start-phantom": "phantomjs --webdriver=4444",
     "coverage": "node node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 5000 tests/server"
   },
   "engines": {

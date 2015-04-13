@@ -1,0 +1,8 @@
+.container
+  form.form-signin(ng-hide="identity.isAuthenticated()")
+    h2.form-signin-heading Por favor, faça sign-in
+    .form-group
+      input.form-control(placeholder="Email", ng-model="username")
+    .form-group
+      input.form-control(placeholder="Password", ng-model="password", type="password")
+    button.btn.btn-primary.btn-lg.btn-block(ng-click="login(username, password)" name="login") Login
