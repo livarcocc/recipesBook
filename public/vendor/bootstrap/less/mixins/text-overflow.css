@@ -1,0 +1,9 @@
+There is no no-color option ("less --help" for help)
+// Text overflow
+// Requires inline-block or block for proper styling
+
+.text-overflow() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

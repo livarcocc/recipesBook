@@ -1,0 +1,11 @@
+There is no no-color option ("less --help" for help)
+// Sizing shortcuts
+
+.size(@width; @height) {
+  width: @width;
+  height: @height;
+}
+
+.square(@size) {
+  .size(@size; @size);
+}

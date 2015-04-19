@@ -1,0 +1,9 @@
+There is no no-color option ("less --help" for help)
+// Contextual backgrounds
+
+.bg-variant(@color) {
+  background-color: @color;
+  a&:hover {
+    background-color: darken(@color, 10%);
+  }
+}
