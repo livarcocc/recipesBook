@@ -33,6 +33,8 @@ var sharedSteps = function () {
   this.Then(/^I should (not )?see an element "([^"]*)"$/, function (negate, location, next) {
     this.browser.elementByCss(location, function (err) {
       if (negate && !err) {
+        console.log('LOCATION: ' + location);
+
         next.fail();
       }
       else if (err) {
@@ -68,6 +70,23 @@ var sharedSteps = function () {
         el.click(function () {
           next();
         });
+      }
+    });
+  });
+
+  this.Then(/^I am sent to "([^"]*)" page$/, function (path, next) {
+    this.browser.eval("window.location.href", function(err, href) {
+      if (err) {
+        next.fail();
+      }
+      else {
+        console.log('URL:' + href);
+        if(href.indexOf(path) !== -1) {
+          next();
+        }
+        else {
+          next.fail();
+        }
       }
     });
   });

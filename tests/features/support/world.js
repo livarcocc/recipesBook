@@ -22,7 +22,7 @@ browser.on('status', function(info){
 
 // log commands from web driver
 browser.on('command', function(meth, path, data){
-//  console.log(' > \x1b[33m%s\x1b[0m: %s', meth, path, data || '');
+  console.log(' > \x1b[33m%s\x1b[0m: %s', meth, path, data || '');
 });
 
 var getBrowser = function () {

@@ -21,13 +21,15 @@ Feature: Login from home page
     And I have entered "invalidLogin" at "input[placeholder='Email']"
     And I have entered "password" at "input[placeholder='Password']"
     When I click "button[name='login']"
-    Then I am sent to "login" page
-    And I should see an element ""
-    #TODO-licavalc: Add error message in the step above
+    Then I should see an element "h2.form-signin-heading"
+    And I am sent to "login" page
 
   Scenario: Login fields are not displayed when logged in
-    Given I am on the home page authenticated
+    Given I am on the home page unauthenticated
+    And I have entered "login" at "input[placeholder='Email']"
+    And I have entered "password" at "input[placeholder='Password']"
+    When I click "button[name='login']"
+    Then I should see an element "a[name='logout']"
     Then I should not see an element "input[placeholder='Email']"
     Then I should not see an element "input[placeholder='Password'][type=password]"
     Then I should not see an element "button[name='login']"
-    #TODO-licavalc: Add some verification for the logout option
