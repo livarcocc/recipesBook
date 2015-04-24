@@ -2,11 +2,13 @@
 
 describe('The Login controller', function () {
   var loginController,
-      scope,
-      rbIdentity,
-      rbAuthentication,
-      rbNotifier,
-      deferred;
+    scope,
+    rbIdentity,
+    rbAuthentication,
+    rbNotifier,
+    deferred,
+    location,
+    isAuthenticated;
 
   beforeEach(module(ApplicationConfiguration.applicationModuleName));
 
@@ -14,7 +16,11 @@ describe('The Login controller', function () {
     inject(function($controller, $rootScope) {
       scope = $rootScope.$new();
 
-      rbIdentity = 'identityService';
+      isAuthenticated = sinon.stub();
+      isAuthenticated.returns(true);
+      rbIdentity = {
+        isAuthenticated: isAuthenticated
+      };
 
       rbNotifier = {
         success: sinon.spy(),
@@ -33,15 +39,28 @@ describe('The Login controller', function () {
 
       rbAuthentication.authenticate.returns(deferred);
 
+      var url = sinon.stub();
+      url.returns('/#/login');
+      location = {
+        path: sinon.stub(),
+        url: url
+      };
+
       loginController = $controller('rbLoginController', {
         $scope: scope,
         rbIdentity: rbIdentity,
         rbNotifier: rbNotifier,
-        rbAuthentication: rbAuthentication
+        rbAuthentication: rbAuthentication,
+        $location: location
       });
     }));
 
   describe('Login', function () {
+    var invalidUsername = 'invalidUsername',
+        invalidPassword = 'invalidPassword',
+        username = 'username',
+        password = 'password';
+
     it('sets the identity service in the $scope', function () {
       scope.login();
 
@@ -49,11 +68,11 @@ describe('The Login controller', function () {
     });
 
     it('should login with a correct user and password', function() {
-      scope.login('username', 'password');
+      scope.login(username, password);
 
       deferred.success();
 
-      rbAuthentication.authenticate.should.have.been.calledWith('username', 'password');
+      rbAuthentication.authenticate.should.have.been.calledWith(username, password);
       rbNotifier.success.should.have.been.calledWith('You have successfully signed in.');
     });
 
@@ -70,8 +89,6 @@ describe('The Login controller', function () {
 
     it('should fail to login with invalid credentials', function() {
       var message = 'Invalid credentials';
-      var invalidUsername = 'invalidUsername';
-      var invalidPassword = 'invalidPassword';
 
       scope.login(invalidUsername, invalidPassword);
 
@@ -79,6 +96,22 @@ describe('The Login controller', function () {
 
       rbAuthentication.authenticate.should.have.been.calledWith(invalidUsername, invalidPassword);
       rbNotifier.error.should.have.been.calledWith(message);
+    });
+
+    it('redirects the user to /login when login fails', function () {
+      scope.login(invalidUsername, invalidPassword);
+
+      deferred.error();
+
+      location.path.should.have.been.calledWith('/login');
+    });
+
+    it('redirects the user to root(/) when the user is already logged in', function () {
+      scope.login(username, password);
+
+      deferred.success();
+
+      location.path.should.have.been.calledWith('/');
     });
   });
 });
