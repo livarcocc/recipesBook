@@ -16,6 +16,16 @@ angular.module(ApplicationConfiguration.applicationModuleName).factory('rbAuthen
         });
 
       return deferred.promise;
+    },
+    logoutUser: function () {
+      var deferred = $q.defer();
+
+      $http.post('/auth/signout', {logout: true}).success(function () {
+        rbIdentity.currentUser = undefined;
+        deferred.resolve();
+      });
+
+      return deferred.promise;
     }
   };
 });

@@ -21,6 +21,10 @@ module.exports = function (passport) {
           });
         }
       })(req, res, next);
+    },
+    signout: function (req, res) {
+      req.logout();
+      res.end();
     }
   };
 };

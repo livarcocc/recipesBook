@@ -22,4 +22,13 @@ angular.module(ApplicationConfiguration.applicationModuleName)
         $location.path('/login');
       });
     };
+
+    $scope.logout = function () {
+      rbAuthentication.logoutUser().then(function () {
+        $scope.username = '';
+        $scope.password = '';
+        rbNotifier.success('You successfully logged out!');
+        $location.path('/');
+      });
+    };
 });

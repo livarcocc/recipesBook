@@ -12,5 +12,7 @@ module.exports = function(app, controller) {
   }
 
   app.route('/auth/signin').post(controller.signin);
+
+  app.route('auth/signout').post(controller.signout);
 };
 
