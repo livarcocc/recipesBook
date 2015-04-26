@@ -124,4 +124,29 @@ describe('The Account controller', function () {
       done();
     });
   });
+
+  describe('signout', function () {
+    var request,
+      response;
+
+    before(function () {
+      request = {
+        logout: sinon.stub()
+      };
+
+      response = {
+        end: sinon.stub()
+      };
+
+      accountController.signout(request, response);
+    });
+
+    it('invokes sign-out on the request', function () {
+      request.logout.should.have.been.called;
+    });
+
+    it('ends the response', function () {
+      response.end.should.have.been.called;
+    });
+  });
 });

@@ -6,7 +6,8 @@ describe('The Login controller', function () {
     rbIdentity,
     rbAuthentication,
     rbNotifier,
-    deferred,
+    loginDeferred,
+    logoutDeferred,
     location,
     isAuthenticated;
 
@@ -27,17 +28,25 @@ describe('The Login controller', function () {
         error: sinon.spy()
       };
 
-      deferred = {
+      loginDeferred = {
+        then: function(success, error) {
+          this.success = success;
+          this.error = error;
+        }
+      };
+      logoutDeferred = {
         then: function(success, error) {
           this.success = success;
           this.error = error;
         }
       };
       rbAuthentication = {
-        authenticate: sinon.stub()
+        authenticate: sinon.stub(),
+        logoutUser: sinon.stub()
       };
 
-      rbAuthentication.authenticate.returns(deferred);
+      rbAuthentication.authenticate.returns(loginDeferred);
+      rbAuthentication.logoutUser.returns(logoutDeferred);
 
       var url = sinon.stub();
       url.returns('/#/login');
@@ -70,7 +79,7 @@ describe('The Login controller', function () {
     it('should login with a correct user and password', function() {
       scope.login(username, password);
 
-      deferred.success();
+      loginDeferred.success();
 
       rbAuthentication.authenticate.should.have.been.calledWith(username, password);
       rbNotifier.success.should.have.been.calledWith('You have successfully signed in.');
@@ -81,7 +90,7 @@ describe('The Login controller', function () {
 
       scope.login();
 
-      deferred.error(message);
+      loginDeferred.error(message);
 
       rbAuthentication.authenticate.should.have.been.calledWith();
       rbNotifier.error.should.have.been.calledWith(message);
@@ -92,7 +101,7 @@ describe('The Login controller', function () {
 
       scope.login(invalidUsername, invalidPassword);
 
-      deferred.error(message);
+      loginDeferred.error(message);
 
       rbAuthentication.authenticate.should.have.been.calledWith(invalidUsername, invalidPassword);
       rbNotifier.error.should.have.been.calledWith(message);
@@ -101,7 +110,7 @@ describe('The Login controller', function () {
     it('redirects the user to /login when login fails', function () {
       scope.login(invalidUsername, invalidPassword);
 
-      deferred.error();
+      loginDeferred.error();
 
       location.path.should.have.been.calledWith('/login');
     });
@@ -109,8 +118,36 @@ describe('The Login controller', function () {
     it('redirects the user to root(/) when the user is already logged in', function () {
       scope.login(username, password);
 
-      deferred.success();
+      loginDeferred.success();
 
+      location.path.should.have.been.calledWith('/');
+    });
+  });
+
+  describe('Logout', function () {
+    beforeEach(function () {
+      scope.username = 'username';
+      scope.password = 'password';
+
+      scope.logout();
+
+      logoutDeferred.success();
+    });
+
+    it('should logout the user', function() {
+      rbAuthentication.logoutUser.should.have.been.called;
+    });
+
+    it('should clear out username and password', function() {
+      scope.username.should.be.empty;
+      scope.password.should.be.empty;
+    });
+
+    it('should notify the user of success', function () {
+      rbNotifier.success.should.have.been.calledWith('You successfully logged out!');
+    });
+
+    it('should redirect the user to root (/)', function () {
       location.path.should.have.been.calledWith('/');
     });
   });

@@ -28,4 +28,23 @@ describe('The Account routes', function () {
 
     done();
   });
+
+  it('maps "/auth/signout" to accountController.signout', function (done) {
+    var routeSpy = {
+        post: sinon.spy()
+      },
+      app = {
+        route: sinon.stub().withArgs('/auth/signout').returns(routeSpy)
+      },
+      controller = {
+        signout: function() {}
+      };
+
+    accountRoutes(app, controller);
+
+    app.route.should.have.been.calledWith('/auth/signout');
+    routeSpy.post.should.have.been.calledWith(controller.signout);
+
+    done();
+  });
 });
