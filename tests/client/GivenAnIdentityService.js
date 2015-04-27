@@ -5,9 +5,37 @@ describe('The Identity Service', function () {
 
   beforeEach(module(ApplicationConfiguration.applicationModuleName));
 
-  beforeEach(inject(function (_rbIdentity_) {
-    rbIdentity = _rbIdentity_;
-  }));
+  describe('when the server sends a user back', function () {
+    beforeEach(module(function ($provide) {
+      $provide.value('$window', {
+        bootstrappedUserObject: 'user'
+      });
+    }));
+
+    beforeEach(inject(function (_rbIdentity_) {
+      rbIdentity = _rbIdentity_;
+    }));
+
+    it('sets the currentUser when the server sends a user', function () {
+      rbIdentity.currentUser.should.exist;
+    });
+  });
+
+  describe('when the server does not send a user back', function () {
+    beforeEach(module(function ($provide) {
+      $provide.value('$window', {
+        bootstrappedUserObject: undefined
+      });
+    }));
+
+    beforeEach(inject(function (_rbIdentity_) {
+      rbIdentity = _rbIdentity_;
+    }));
+
+    it('sets the currentUser to undefined when the server does not sends a user', function () {
+      expect(rbIdentity.currentUser).to.not.exist;
+    });
+  });
 
   it('defines a currentUser property', function () {
     rbIdentity.should.include.key('currentUser');
@@ -21,6 +49,8 @@ describe('The Identity Service', function () {
     });
 
     it('returns false when there is not a currentUser', function() {
+      rbIdentity.currentUser = undefined;
+
       rbIdentity.isAuthenticated().should.be.false;
     });
   });
