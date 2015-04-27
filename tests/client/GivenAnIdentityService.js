@@ -8,7 +8,9 @@ describe('The Identity Service', function () {
   describe('when the server sends a user back', function () {
     beforeEach(module(function ($provide) {
       $provide.value('$window', {
-        bootstrappedUserObject: 'user'
+        bootstrappedUserObject: {
+          _id: 1
+        }
       });
     }));
 
@@ -43,7 +45,9 @@ describe('The Identity Service', function () {
 
   describe('isAuthenticated', function () {
     it('returns true when there is a currentUser', function() {
-      rbIdentity.currentUser = 'user';
+      rbIdentity.currentUser = {
+        _id: 1
+      };
 
       rbIdentity.isAuthenticated().should.be.true;
     });

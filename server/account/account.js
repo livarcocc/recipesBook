@@ -47,6 +47,9 @@ module.exports = function () {
     provider: {
       type: String,
       required: 'Provider is required'
+    },
+    roles: {
+      type: String
     }
   });
 

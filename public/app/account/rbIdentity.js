@@ -1,9 +1,10 @@
 'use strict';
 
-angular.module(ApplicationConfiguration.applicationModuleName).factory('rbIdentity', function ($window) {
+angular.module(ApplicationConfiguration.applicationModuleName).factory('rbIdentity', function ($window, rbUser) {
   var currentUser = undefined;
   if(!!$window.bootstrappedUserObject)  {
-    currentUser = $window.bootstrappedUserObject;
+    currentUser = new rbUser();
+    angular.extend(currentUser, $window.bootstrappedUserObject);
   }
 
   return {

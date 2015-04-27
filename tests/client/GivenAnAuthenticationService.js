@@ -8,7 +8,8 @@ describe('The Authentication Service', function () {
   var username = 'username',
       password = 'password',
       invalidUsername = 'invalidUsername',
-      errorMessage = 'Auth failed';
+      errorMessage = 'Auth failed',
+      user;
 
   beforeEach(module(ApplicationConfiguration.applicationModuleName));
 
@@ -21,7 +22,8 @@ describe('The Authentication Service', function () {
 
   describe('authenticate', function () {
     beforeEach(function () {
-      $httpBackend.when('POST', '/auth/signin',{username: username, password: password}).respond(200, {data: 'user'});
+      user = {_id: 1};
+      $httpBackend.when('POST', '/auth/signin',{username: username, password: password}).respond(200, {data: user});
       $httpBackend.when('POST', '/auth/signin',{username: invalidUsername, password: password})
         .respond(400, {message: errorMessage});
     });
@@ -30,7 +32,7 @@ describe('The Authentication Service', function () {
       rbAuthentication.authenticate(username, password);
       $httpBackend.flush();
 
-      rbIdentity.currentUser.should.equal('user');
+      rbIdentity.currentUser._id.should.equal(user._id);
     });
 
     it('resolves the deferred successfully when authentication succeeds', function () {

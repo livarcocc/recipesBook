@@ -1,13 +1,15 @@
 'use strict';
 
-angular.module(ApplicationConfiguration.applicationModuleName).factory('rbAuthentication', function ($http, rbIdentity, $q) {
+angular.module(ApplicationConfiguration.applicationModuleName).factory('rbAuthentication', function ($http, rbIdentity, $q, rbUser) {
   return {
     authenticate: function(username, password) {
       var deferred = $q.defer();
 
       $http.post('/auth/signin', {username: username, password: password}).
         success(function(response) {
-          rbIdentity.currentUser = response.data;
+          var user = new rbUser();
+          angular.extend(user, response.data);
+          rbIdentity.currentUser = user;
 
           deferred.resolve();
         }).
