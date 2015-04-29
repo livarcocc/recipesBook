@@ -15,17 +15,13 @@ var accountParams = {
   provider: 'local'
 };
 
-before(function (done) {
-  var config = require('../../server/config/config.js')['test'];
-
-  require('../../server/config/mongo.js')(config);
-
-  Account = mongoose.model('Account');
-
-  done();
-});
-
 describe('The Account model', function () {
+  before(function (done) {
+    Account = mongoose.model('Account');
+
+    done();
+  });
+
   before(function (done) {
     account = new Account(accountParams);
 
