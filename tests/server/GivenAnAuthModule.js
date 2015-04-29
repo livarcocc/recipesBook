@@ -43,10 +43,10 @@ describe('The Auth module', function () {
   });
 
   describe('The requireRole method', function () {
-    it('returns 403 when the user does not have the role specified in the method', function () {
+    it('returns 403 when the user is not authenticated', function () {
       var request = {
-          user: {
-            roles: ['regular-joe']
+          isAuthenticated: function () {
+            return false;
           }
         },
         response = {
@@ -65,7 +65,32 @@ describe('The Auth module', function () {
     it('returns 403 when the user does not have the role specified in the method', function () {
       var request = {
           user: {
+            roles: ['regular-joe']
+          },
+          isAuthenticated: function () {
+            return true;
+          }
+        },
+        response = {
+          status: sinon.spy(),
+          end: sinon.spy()
+        };
+
+      var requireRole = auth.requiresRole('admin');
+
+      requireRole(request, response);
+
+      response.status.should.have.been.calledWith(403);
+      response.end.should.have.been.called;
+    });
+
+    it('invokes the next middleware when the user is authenticated and has the right role', function () {
+      var request = {
+          user: {
             roles: ['regular-joe', 'admin']
+          },
+          isAuthenticated: function () {
+            return true;
           }
         },
         response = {
