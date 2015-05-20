@@ -1,15 +1,14 @@
 .navbar-right(ng-controller="rbLoginController")
-    .nav.navbar-nav.navbar-right
-      ul.nav.navbar-nav
-        li
-          a(href="#/signup") Sign Up
-        li
-          form.navbar-form(ng-hide="identity.isAuthenticated()")
-              .form-group
-                  input.form-control(placeholder="Email", ng-model="username")
-              .form-group
-                  input.form-control(placeholder="Password", ng-model="password", type="password")
-              button.btn.btn-primary(ng-click="login(username, password)" name="login") Login
+    ul.nav.navbar-nav.navbar-right(ng-hide="identity.isAuthenticated()")
+      li
+        a(href="#/signup") Sign Up
+      li
+        form.navbar-form
+            .form-group
+                input.form-control(placeholder="Email", ng-model="username")
+            .form-group
+                input.form-control(placeholder="Password", ng-model="password", type="password")
+            button.btn.btn-primary(ng-click="login(username, password)" name="login") Login
     ul.nav.navbar-nav.navbar-right(ng-show="identity.isAuthenticated()")
         li.dropdown
             a.dropdown-toggle(href="", data-toggle="dropdown")
