@@ -2,7 +2,7 @@
   .well
     form.form-horizontal(name="signUpForm")
       fieldset
-        legend "New User Information"
+        legend New User
         .form-group
           label.col-md-2.control-label(for="email") Email
           .col-md-10
@@ -22,6 +22,6 @@
         .form-group
           .col-md-10.col-md-offset-2
             .pull-right
-              button.btn.btn-primary(ng-click="signUp()" ng-disabled="signupForm.$invalid") Submit
+              button.btn.btn-primary(ng-click="signUp()" ng-disabled="signUpForm.$invalid") Submit
               | &nbsp;
               a.btn.btn-default(href="/") Cancel

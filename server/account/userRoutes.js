@@ -12,5 +12,6 @@ module.exports = function(app, controller) {
   }
 
   app.route('/api/users').get(auth.requiresRole('admin'), controller.users);
+  app.route('/api/users').post(controller.createUser);
 };
 

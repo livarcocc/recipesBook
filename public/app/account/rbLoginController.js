@@ -8,11 +8,11 @@ angular.module(ApplicationConfiguration.applicationModuleName)
       }
     };
 
+    $scope.identity = rbIdentity;
+
     redirectWhenAuthenticatedAndAtLogin();
 
     $scope.login = function(username, password) {
-      $scope.identity = rbIdentity;
-
       var authenticate = rbAuthentication.authenticate(username, password);
       authenticate.then(function() {
         rbNotifier.success('You have successfully signed in.');
