@@ -10,8 +10,8 @@ module.exports = function (User) {
     createUser: function (req, res, next) {
       var newUser = req.body;
 
-      newUser.DisplayName = newUser.firstName + ' ' + newUser.lastName;
-      newUser.userName = newUser.email;
+      newUser.displayName = newUser.firstName + ' ' + newUser.lastName;
+      newUser.userName = newUser.email.toLowerCase();
       newUser.provider = 'local';
 
       User.create(newUser, function (err, user) {
