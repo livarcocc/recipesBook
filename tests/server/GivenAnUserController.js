@@ -113,6 +113,15 @@ describe('The User controller', function () {
       done();
     });
 
+    it('sends a 400 with an updated reason when user.create fails with E11000', function (done) {
+      actualCallback('E11000');
+
+      response.status.should.have.been.calledWith(400);
+      response.send.should.have.been.calledWith({reason: 'Error: Duplicate username'});
+
+      done();
+    });
+
     it('removes the salt and password from the newUser when sending it back', function (done) {
       actualCallback(undefined, newUser);
 

@@ -16,6 +16,10 @@ module.exports = function (User) {
 
       User.create(newUser, function (err, user) {
         if(err) {
+          if(err.toString().indexOf('E11000') > -1) {
+            err = new Error('Duplicate username');
+          }
+
           res.status(400);
           return res.send({
             reason: err.toString()
