@@ -19,11 +19,15 @@ describe('The Account controller', function () {
       user = {
         password: 'password',
         salt: 'salt'
-      };
+      },
+      username = 'USERNAME';
 
   before(function (done) {
     request = {
-      login: sinon.spy()
+      login: sinon.spy(),
+      body: {
+        username: username
+      }
     };
 
     response = {
@@ -45,21 +49,28 @@ describe('The Account controller', function () {
 
   describe('signin', function() {
     it('calls passport.authenticateCallback with local strategy', function (done) {
-      accountController.signin();
+      accountController.signin(request);
 
       passportSpy.authenticate.should.have.been.calledWith('local');
 
       done();
     });
 
+    it('sets req.body.username to lower case', function (done) {
+      accountController.signin(request);
+
+      request.body.username.should.equal(username.toLowerCase());
+
+      done();
+    });
+
     it('immediately invokes the function returned by passport.authenticateCallback', function (done) {
-      var req = 'req',
-          res = 'res',
+      var res = 'res',
           next = function (){};
 
-      accountController.signin(req, res, next);
+      accountController.signin(request, res, next);
 
-      authenticateCallback.should.have.been.calledWith(req, res, next);
+      authenticateCallback.should.have.been.calledWith(request, res, next);
 
       done();
     });
