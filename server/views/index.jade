@@ -9,6 +9,14 @@ block main-content
         ul.nav.navbar-nav
           li
             a(href="/") Home
+        ul.nav.navbar-nav
+          li.dropdown
+            a.dropdown-toggle(href="", data-toggle="dropdown")
+              | Recipes
+              b.caret
+            ul.dropdown-menu
+              li
+                a(href="#/newRecipe") New Recipe
         section(ng-include="'/partials/account/navbar-login'")
   section.content
     div(ng-view)

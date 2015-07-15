@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node server.js",
     "start-phantom": "phantomjs --webdriver=4444",
-    "coverage": "node node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 5000 tests/server"
+    "coverage": "node node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 5000 tests/server",
+    "test": "node_modules/mocha/bin/mocha ./tests/server"
   },
   "engines": {
     "node": "0.10.x",

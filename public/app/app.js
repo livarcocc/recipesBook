@@ -5,9 +5,10 @@ angular.module(ApplicationConfiguration.applicationModuleName,
 
 angular.module(ApplicationConfiguration.applicationModuleName).config(function ($routeProvider, $locationProvider) {
   $routeProvider
-    .when('/', { templateUrl: '/partials/main/main', controller: 'mainCtrl'})
+    .when('/', {templateUrl: '/partials/main/main', controller: 'mainCtrl'})
     .when('/login', {templateUrl: '/partials/account/login', controller: 'rbLoginController'})
-    .when('/signup', {templateUrl: '/partials/account/signup', controller: 'rbSignUpController'});
+    .when('/signup', {templateUrl: '/partials/account/signup', controller: 'rbSignUpController'})
+    .when('/newRecipe', {templateUrl: '/partials/recipe/new-recipe', controller: 'rbAddOrUpdateRecipeController'});
 });
 
 angular.module(ApplicationConfiguration.applicationModuleName).controller('mainCtrl', function () {

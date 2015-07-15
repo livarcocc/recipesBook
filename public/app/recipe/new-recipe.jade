@@ -1,0 +1,37 @@
+.container
+  .well
+    form.form-horizontal
+      fieldset
+        legend {{createOrEditRecipeLegend}}
+        .form-group
+          label.control-label.col-xs-2(for="name") Name
+          .col-xs-10
+            input.form-control(name="name", type="text", placeholder="Name", ng-model="name", required)
+        .form-group
+          label.control-label.col-xs-2(for="description") Description
+          .col-xs-10
+            textarea.form-control(name="description", placeholder="Description", ng-model="description", required)
+        .panel.panel-default
+          .panel-heading
+            h4.panel-tile Ingredients
+          .panel-body
+            .container-fluid.ingredients-list(ng-repeat="ingredient in ingredients")
+              .form-group.col-md-2
+                label.control-label Quantity
+                input.form-control(name="quantity.{{ingredient.id}}",
+                  type="text", placeholder="0.5, 1, 1.5", ng-model="ingredient.quantity")
+              .form-group.col-md-2
+                label.control-label Unit
+                input.form-control(name="unit.{{ingredient.id}}",
+                  type="text", placeholder="0.5, 1, 1.5", ng-model="ingredient.unit")
+              .form-group.col-md-3
+                label.control-label Ingredient
+                input.form-control(name="name.{{ingredient.id}}",
+                  type="text", placeholder="Tomate, Onion...", ng-model="ingredient.name")
+              .form-group.col-md-2
+                label.control-label Preparation
+                input.form-control(name="preparation.{{ingredient.id}}",
+                  type="text", placeholder="Chopped, Diced...", ng-model="ingredient.preparation")
+              .col-md-2
+                a.btn.btn-danger(ng-click="removeIngredient(ingredient.id)") Remove
+            a.btn.btn-default(ng-click="addIngredient()") Add
