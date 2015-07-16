@@ -26,5 +26,12 @@ angular.module(ApplicationConfiguration.applicationModuleName)
     };
 
     $scope.removeIngredient = function(ingredientId) {
+      var index = _.findIndex($scope.ingredients, function (item) {
+        return item.id == ingredientId;
+      });
+
+      if(index > -1) {
+        $scope.ingredients.splice(index, 1);
+      }
     };
   });

@@ -23,6 +23,7 @@ module.exports = function(config) {
       './public/vendor/angular-route/angular-route.js',
       './node_modules/angular-mocks/angular-mocks.js',
       './public/vendor/toastr/toastr.js',
+      './public/vendor/underscore/underscore.js',
       './public/app/config.js',
       './public/app/app.js',
       './public/app/*/*.js',
