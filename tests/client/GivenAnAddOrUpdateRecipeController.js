@@ -15,6 +15,25 @@ describe('The AddOrUpdateRecipe controller', function () {
       });
     }));
 
+  describe('the list of measurements', function () {
+    it('exists', function () {
+      should.exist(scope.measurements);
+    });
+
+    it('has items with name and measurement type', function () {
+      _.each(scope.measurements, function (measurement) {
+        should.exist(measurement.name);
+        should.exist(measurement.type);
+
+        if(measurement.type !== 'imperial' && measurement.type !== 'metric') {
+          assert.fail();
+        }
+      });
+
+      scope.measurements.length.should.be.at.least(1);
+    });
+  });
+
   describe('Adding an ingredient', function () {
     beforeEach(function () {
       scope.addIngredient();

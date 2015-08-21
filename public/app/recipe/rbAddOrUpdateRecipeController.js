@@ -4,6 +4,13 @@ angular.module(ApplicationConfiguration.applicationModuleName)
 
     var counter = 0;
 
+    $scope.measurements = [
+      {
+        name: 'pound(s)',
+        type: 'imperial'
+      }
+    ];
+
     $scope.ingredients = [
       {
         id: counter,
