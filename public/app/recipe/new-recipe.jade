@@ -1,16 +1,14 @@
 .container
   .well
-    form.form-horizontal
+    form
       fieldset
         legend {{createOrEditRecipeLegend}}
         .form-group
-          label.control-label.col-xs-2(for="name") Name
-          .col-xs-10
-            input.form-control(name="name", type="text", placeholder="Name", ng-model="name", required)
+          label.control-label(for="name") Name
+          input.form-control(name="name", type="text", placeholder="Name", ng-model="name", required)
         .form-group
-          label.control-label.col-xs-2(for="description") Description
-          .col-xs-10
-            textarea.form-control(name="description", placeholder="Description", ng-model="description", required)
+          label.control-label(for="description") Description
+          textarea.form-control(name="description", placeholder="Description", ng-model="description", required)
         .panel.panel-default
           .panel-heading
             h4.panel-tile Ingredients
@@ -35,3 +33,20 @@
               .col-md-2
                 a.btn.btn-danger(ng-click="removeIngredient(ingredient.id)") Remove
             a.btn.btn-default(ng-click="addIngredient()") Add
+        .form-group
+          label.control-label(for="directions") Directions
+          textarea.form-control(name="directions", placeholder="Directions", ng-model="directions", required)
+        .row
+          .form-group.col-lg-6
+            label.control-label(for="preparationTime") Preparation Time
+            input.form-control(name="preparationTime", type="text", placeholder="15 minutes",
+              ng-model="preparationTime", required)
+          .form-group.col-lg-6
+            label.control-label(for="cookingTime") Cooking Time
+            input.form-control(name="cookingTime", type="text", placeholder="15 minutes",
+              ng-model="cookingTime", required)
+        .row
+          .form-group.col-lg-6
+            label.control-label(for="numberOfServings") Number of servings
+            input.form-control(name="numberOfServings", type="text", placeholder="6",
+              ng-model="numberOfServings", required)

@@ -1,5 +1,5 @@
 angular.module(ApplicationConfiguration.applicationModuleName)
-  .controller("rbAddOrUpdateRecipeController", function ($scope) {
+  .controller("rbAddOrUpdateRecipeController", function ($scope, rbRecipe, rbNotifier, $location) {
     $scope.createOrEditRecipeLegend = 'Create a new Recipe';
 
     var counter = 0;
@@ -15,7 +15,7 @@ angular.module(ApplicationConfiguration.applicationModuleName)
       {
         id: counter,
         quantity: "",
-        unit: "lb",
+        unit: "pound(s)",
         name: "",
         preparation: ""
       }
@@ -26,13 +26,13 @@ angular.module(ApplicationConfiguration.applicationModuleName)
       $scope.ingredients.push({
         id: counter,
         quantity: "",
-        unit: "lb",
+        unit: "pound(s)",
         name: "",
         preparation: ""
       });
     };
 
-    $scope.removeIngredient = function(ingredientId) {
+    $scope.removeIngredient = function (ingredientId) {
       var index = _.findIndex($scope.ingredients, function (item) {
         return item.id == ingredientId;
       });
@@ -40,5 +40,24 @@ angular.module(ApplicationConfiguration.applicationModuleName)
       if(index > -1) {
         $scope.ingredients.splice(index, 1);
       }
+    };
+
+    $scope.saveRecipe = function () {
+      var newRecipe = new rbRecipe({
+        name: $scope.name,
+        description: $scope.description,
+        ingredients: $scope.ingredients,
+        directions: $scope.directions,
+        preparationTime: $scope.preparationTime,
+        cookingTime: $scope.cookingTime,
+        numberOfServings: $scope.numberOfServings
+      });
+
+      newRecipe.$save().then(function () {
+        rbNotifier.success('Recipe saved!');
+        $location.path('/recipes/' + rbRecipe.id);
+      }, function (response) {
+        rbNotifier.error(response.data.reason);
+      });
     };
   });

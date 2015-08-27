@@ -2,16 +2,37 @@
 
 describe('The AddOrUpdateRecipe controller', function () {
   var controller,
-    scope;
+    scope,
+    rbRecipe,
+    save,
+    saveDeferred;
 
   beforeEach(module(ApplicationConfiguration.applicationModuleName));
 
   beforeEach(
     inject(function($controller, $rootScope) {
       scope = $rootScope.$new();
+      rbRecipe = sinon.stub();
+      save = sinon.stub();
+
+      saveDeferred = {
+        then: function (success, error) {
+          this.success = success;
+          this.error = error;
+        }
+      };
+
+      save.returns(saveDeferred);
+
+      var newRecipe = {
+        $save: save
+      };
+
+      rbRecipe.returns(newRecipe);
 
       controller = $controller('rbAddOrUpdateRecipeController', {
-        $scope: scope
+        $scope: scope,
+        rbRecipe: rbRecipe
       });
     }));
 
@@ -96,6 +117,50 @@ describe('The AddOrUpdateRecipe controller', function () {
 
     it('sets the id of the first ingredient to 0', function () {
       scope.ingredients[0].id.should.equal(0);
+    });
+
+    describe('Adding a recipe', function () {
+      var name = 'recipeName',
+        description = 'recipeDescription',
+        ingredients = [{
+          id: 0,
+          name: 'ingredient',
+          preparation: 'chopped',
+          quantity: 10,
+          unity: 'pound(s)'
+        }],
+        directions = 'recipeDirections',
+        preparationTime = '15 minutes',
+        cookingTime = '30 minutes',
+        numberOfServings = 4;
+
+      beforeEach(function () {
+        scope.name = name;
+        scope.description = description;
+        scope.ingredients = ingredients;
+        scope.directions = directions;
+        scope.preparationTime = preparationTime;
+        scope.cookingTime = cookingTime;
+        scope.numberOfServings = numberOfServings;
+
+        scope.saveRecipe();
+      });
+
+      it('creates a new recipe with information from the $scope', function () {
+        rbRecipe.should.have.been.calledWith({
+          name: name,
+          description: description,
+          ingredients: ingredients,
+          directions: directions,
+          preparationTime: preparationTime,
+          cookingTime: cookingTime,
+          numberOfServings: numberOfServings
+        });
+      });
+
+      it('calls $save on the resource', function () {
+        save.should.have.been.called;
+      });
     });
   });
 });
