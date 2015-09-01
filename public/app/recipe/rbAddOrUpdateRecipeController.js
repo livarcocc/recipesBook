@@ -4,6 +4,7 @@ angular.module(ApplicationConfiguration.applicationModuleName)
 
     var counter = 0;
 
+    //TODO-livar: Extract a measurements service to be injected
     $scope.measurements = [
       {
         name: 'pound(s)',
@@ -19,6 +20,12 @@ angular.module(ApplicationConfiguration.applicationModuleName)
         name: "",
         preparation: ""
       }
+    ];
+
+    //TODO-livar: Extract a cookbook service as well
+    $scope.cookBooks = [
+      {name: "Please, select a cookbook"},
+      {id: 12, name: "Receitas de Mainha"}
     ];
 
     $scope.addIngredient = function () {
@@ -50,12 +57,14 @@ angular.module(ApplicationConfiguration.applicationModuleName)
         directions: $scope.directions,
         preparationTime: $scope.preparationTime,
         cookingTime: $scope.cookingTime,
-        numberOfServings: $scope.numberOfServings
+        numberOfServings: $scope.numberOfServings,
+        cookbook: $scope.cookbook
       });
 
-      newRecipe.$save().then(function () {
+      newRecipe.$save().then(function (recipe) {
+        _.extend(recipe, newRecipe);
         rbNotifier.success('Recipe saved!');
-        $location.path('/recipes/' + rbRecipe.id);
+        $location.path('/recipes/' + recipe.id);
       }, function (response) {
         rbNotifier.error(response.data.reason);
       });

@@ -4,6 +4,8 @@ describe('The AddOrUpdateRecipe controller', function () {
   var controller,
     scope,
     rbRecipe,
+    rbNotifier,
+    location,
     save,
     saveDeferred;
 
@@ -14,6 +16,13 @@ describe('The AddOrUpdateRecipe controller', function () {
       scope = $rootScope.$new();
       rbRecipe = sinon.stub();
       save = sinon.stub();
+      rbNotifier = {
+        success: sinon.spy(),
+        error: sinon.spy()
+      };
+      location = {
+        path: sinon.spy()
+      };
 
       saveDeferred = {
         then: function (success, error) {
@@ -32,7 +41,9 @@ describe('The AddOrUpdateRecipe controller', function () {
 
       controller = $controller('rbAddOrUpdateRecipeController', {
         $scope: scope,
-        rbRecipe: rbRecipe
+        rbRecipe: rbRecipe,
+        rbNotifier: rbNotifier,
+        $location: location
       });
     }));
 
@@ -132,7 +143,12 @@ describe('The AddOrUpdateRecipe controller', function () {
         directions = 'recipeDirections',
         preparationTime = '15 minutes',
         cookingTime = '30 minutes',
-        numberOfServings = 4;
+        numberOfServings = 4,
+        cookbook = 1,
+        newRecipeId = 22,
+        newRecipe = {
+          id: newRecipeId
+        };
 
       beforeEach(function () {
         scope.name = name;
@@ -142,6 +158,7 @@ describe('The AddOrUpdateRecipe controller', function () {
         scope.preparationTime = preparationTime;
         scope.cookingTime = cookingTime;
         scope.numberOfServings = numberOfServings;
+        scope.cookbook = cookbook;
 
         scope.saveRecipe();
       });
@@ -154,12 +171,43 @@ describe('The AddOrUpdateRecipe controller', function () {
           directions: directions,
           preparationTime: preparationTime,
           cookingTime: cookingTime,
-          numberOfServings: numberOfServings
+          numberOfServings: numberOfServings,
+          cookbook: cookbook
         });
       });
 
       it('calls $save on the resource', function () {
         save.should.have.been.called;
+      });
+
+      describe('when successfully', function () {
+        beforeEach(function () {
+          saveDeferred.success(newRecipe);
+        });
+
+        it('notifies that the save was successful', function () {
+          rbNotifier.success.should.have.been.calledWith('Recipe saved!');
+        });
+
+        it('sets the page to the details page of the new recipe', function () {
+          location.path.should.have.been.calledWith('/recipes/' + newRecipeId);
+        });
+      });
+
+      describe('when fails', function () {
+        var failureReason = 'it is supposed to fail.';
+
+        beforeEach(function () {
+          saveDeferred.error({
+            data: {
+              reason: failureReason
+            }
+          });
+        });
+
+        it('notifies that the save failed', function () {
+          rbNotifier.error.should.have.been.calledWith(failureReason);
+        });
       });
     });
   });

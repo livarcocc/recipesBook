@@ -1,6 +1,6 @@
 .container
   .well
-    form
+    form(name="newRecipeForm")
       fieldset
         legend {{createOrEditRecipeLegend}}
         .form-group
@@ -25,7 +25,7 @@
               .form-group.col-md-3
                 label.control-label Ingredient
                 input.form-control(name="name.{{ingredient.id}}",
-                  type="text", placeholder="Tomate, Onion...", ng-model="ingredient.name")
+                  type="text", placeholder="Tomato, Onion...", ng-model="ingredient.name")
               .form-group.col-md-2
                 label.control-label Preparation
                 input.form-control(name="preparation.{{ingredient.id}}",
@@ -50,3 +50,13 @@
             label.control-label(for="numberOfServings") Number of servings
             input.form-control(name="numberOfServings", type="text", placeholder="6",
               ng-model="numberOfServings", required)
+        .row
+          .form-group.col-lg-6
+            label.control-label(for="cookBook") Cook Book
+            select.form-control(data-ng-model="cookBook", data-ng-options="cb.name for cb in cookBooks track by cb.id ", required)
+        .form-group
+          .col-md-10.col-md-offset-2
+            .pull-right
+              button.btn.btn-primary(ng-click="saveRecipe()" ng-disabled="newRecipeForm.$invalid") Submit
+              | &nbsp;
+              a.btn.btn-default(href="/") Cancel
