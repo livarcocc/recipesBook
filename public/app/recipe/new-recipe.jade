@@ -32,7 +32,8 @@
                   type="text", placeholder="Chopped, Diced...", ng-model="ingredient.preparation")
               .col-md-2
                 a.btn.btn-danger(ng-click="removeIngredient(ingredient.id)") Remove
-            a.btn.btn-default(ng-click="addIngredient()") Add
+            .pull-right
+              a.btn.btn-default(ng-click="addIngredient()") Add
         .form-group
           label.control-label(for="directions") Directions
           textarea.form-control(name="directions", placeholder="Directions", ng-model="directions", required)

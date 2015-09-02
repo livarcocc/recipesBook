@@ -64,6 +64,21 @@ describe('The Account controller', function () {
       done();
     });
 
+    it('returns 400 when no username is passed', function (done) {
+      accountController.signin({
+        body: {
+
+        }
+      }, response, response);
+
+      response.status.should.have.been.calledWith(400);
+      response.send.should.have.been.calledWith({
+        message: 'No username provided'
+      });
+
+      done();
+    });
+
     it('immediately invokes the function returned by passport.authenticateCallback', function (done) {
       var res = 'res',
           next = function (){};

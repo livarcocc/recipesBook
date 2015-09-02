@@ -3,6 +3,13 @@
 module.exports = function (passport) {
   return {
     signin: function (req, res, next) {
+      if(req === undefined || req.body === undefined || req.body.username === undefined) {
+        res.status(400).send({
+          message: 'No username provided'
+        });
+        return;
+      }
+
       req.body.username = req.body.username.toLowerCase();
       passport.authenticate('local', function (err, user, info) {
         if (err || !user) {
