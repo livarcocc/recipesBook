@@ -17,9 +17,7 @@ describe('The AddOrUpdateRecipe controller', function () {
       scope = $rootScope.$new();
       rbRecipe = sinon.stub();
       rbMeasurements = {
-        get: function () {
-          return {
-            then: function (success) {
+        query: function (success) {
               success([
                 {
                   name: 'pound(s)',
@@ -27,9 +25,8 @@ describe('The AddOrUpdateRecipe controller', function () {
                 }
               ]);
             }
-          }
-        }
-      };
+          };
+
       save = sinon.stub();
       rbNotifier = {
         success: sinon.spy(),

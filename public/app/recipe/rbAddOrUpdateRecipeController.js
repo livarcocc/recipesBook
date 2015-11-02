@@ -4,18 +4,20 @@ angular.module(ApplicationConfiguration.applicationModuleName)
 
     var counter = 0;
 
-    rbMeasurement.get().then(function (measurements) {
-      $scope.measurements = measurements;
-    }, function (response) {
-      rbNotifier.error(response.data.reason);
+    rbMeasurement.query(
+      function (measurements) {
+        $scope.measurements = measurements;
+      },
+      function (response) {
+        rbNotifier.error(response.data.reason);
 
-      $scope.measurements = [
-        {
-          name: 'pound(s)',
-          type: 'imperial'
-        }
-      ];
-    });
+        $scope.measurements = [
+          {
+            name: 'pound(s)',
+            type: 'imperial'
+          }
+        ];
+      });
 
     $scope.ingredients = [
       {

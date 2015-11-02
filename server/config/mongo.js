@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
-    accountModelSetup = require('../account/account.js');
+    accountModelSetup = require('../account/account.js'),
+    measurementModelSetup = require('../measurement/measurement.js');
 
 module.exports = function (config) {
   mongoose.connect(config.db);
@@ -12,4 +13,5 @@ module.exports = function (config) {
   });
 
   accountModelSetup();
+  measurementModelSetup();
 };
