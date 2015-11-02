@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 
 module.exports = function () {
   var measurementType = 'imperial metric'.split(' ');
+  var categoryType = 'Length Volume Weight'.split(' ');
 
   var measurementSchema = mongoose.Schema({
     name: {
@@ -13,6 +14,10 @@ module.exports = function () {
     type: {
       type: String,
       enum: measurementType
+    },
+    category: {
+      type: String,
+      enum: categoryType
     }
   });
 
