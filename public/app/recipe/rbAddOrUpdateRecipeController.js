@@ -1,16 +1,21 @@
 angular.module(ApplicationConfiguration.applicationModuleName)
-  .controller("rbAddOrUpdateRecipeController", function ($scope, rbRecipe, rbNotifier, $location) {
+  .controller("rbAddOrUpdateRecipeController", function ($scope, rbRecipe, rbNotifier, $location, rbMeasurement) {
     $scope.createOrEditRecipeLegend = 'Create a new Recipe';
 
     var counter = 0;
 
-    //TODO-livar: Extract a measurements service to be injected
-    $scope.measurements = [
-      {
-        name: 'pound(s)',
-        type: 'imperial'
-      }
-    ];
+    rbMeasurement.get().then(function (measurements) {
+      $scope.measurements = measurements;
+    }, function (response) {
+      rbNotifier.error(response.data.reason);
+
+      $scope.measurements = [
+        {
+          name: 'pound(s)',
+          type: 'imperial'
+        }
+      ];
+    });
 
     $scope.ingredients = [
       {

@@ -5,6 +5,7 @@ describe('The AddOrUpdateRecipe controller', function () {
     scope,
     rbRecipe,
     rbNotifier,
+    rbMeasurements,
     location,
     save,
     saveDeferred;
@@ -15,6 +16,20 @@ describe('The AddOrUpdateRecipe controller', function () {
     inject(function($controller, $rootScope) {
       scope = $rootScope.$new();
       rbRecipe = sinon.stub();
+      rbMeasurements = {
+        get: function () {
+          return {
+            then: function (success) {
+              success([
+                {
+                  name: 'pound(s)',
+                  type: 'imperial'
+                }
+              ]);
+            }
+          }
+        }
+      };
       save = sinon.stub();
       rbNotifier = {
         success: sinon.spy(),
@@ -43,7 +58,8 @@ describe('The AddOrUpdateRecipe controller', function () {
         $scope: scope,
         rbRecipe: rbRecipe,
         rbNotifier: rbNotifier,
-        $location: location
+        $location: location,
+        rbMeasurement: rbMeasurements
       });
     }));
 
