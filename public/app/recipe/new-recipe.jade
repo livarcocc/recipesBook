@@ -20,8 +20,8 @@
                   type="text", placeholder="0.5, 1, 1.5", ng-model="ingredient.quantity")
               .form-group.col-md-2
                 label.control-label Unit
-                input.form-control(name="unit.{{ingredient.id}}",
-                  type="text", placeholder="0.5, 1, 1.5", ng-model="ingredient.unit")
+                select.form-control(name="unit.{{ingredient.id}}", ng-model="ingredient.unit", ng-options="measurement.name for measurement in measurements")
+                  option(value="") Choose a unit
               .form-group.col-md-3
                 label.control-label Ingredient
                 input.form-control(name="name.{{ingredient.id}}",
