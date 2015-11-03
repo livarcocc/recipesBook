@@ -4,7 +4,7 @@ var should = require('chai').should(),
   sinon = require('sinon'),
   mongoose = require('mongoose');
 
-var Measurement, imperialMeasurement, metricMeasurement;
+var Measurement, measurement;
 
 describe('The Measurement model', function () {
   before(function (done) {
@@ -14,7 +14,7 @@ describe('The Measurement model', function () {
   });
 
   it('validates the type', function (done) {
-    var measurement = new Measurement({name: 'pounds', type: 'not imperial', category: 'Weight'});
+    measurement = new Measurement({name: 'pounds', type: 'not imperial', category: 'Weight'});
 
     measurement.save(function (err) {
       err.should.exist;
@@ -23,7 +23,7 @@ describe('The Measurement model', function () {
   });
 
   it('validates the category', function (done) {
-    var measurement = new Measurement({name: 'pounds', type: 'imperial', category: 'not Weight'});
+    measurement = new Measurement({name: 'pounds', type: 'Imperial', category: 'not Weight'});
 
     measurement.save(function (err) {
       err.should.exist;
@@ -32,58 +32,54 @@ describe('The Measurement model', function () {
   });
 
   it('can create a measurement with imperial category', function (done) {
-    imperialMeasurement = new Measurement({name: 'pounds', type: 'imperial', category: 'Weight'});
+    measurement = new Measurement({name: 'pounds', type: 'Imperial', category: 'Weight'});
 
-    imperialMeasurement.save(function (err) {
+    measurement.save(function (err) {
       should.not.exist(err);
       done();
     });
   });
 
-  it('can create a measurement with imperial category', function (done) {
-    metricMeasurement = new Measurement({name: 'pounds', type: 'metric', category: 'Weight'});
+  it('can create a measurement with metric category', function (done) {
+    measurement = new Measurement({name: 'pounds', type: 'Metric', category: 'Weight'});
 
-    metricMeasurement.save(function (err) {
+    measurement.save(function (err) {
       should.not.exist(err);
       done();
     });
   });
 
   it('can create a measurement with length category', function (done) {
-    imperialMeasurement = new Measurement({name: 'pounds', type: 'imperial', category: 'Length'});
+    measurement = new Measurement({name: 'pounds', type: 'Imperial', category: 'Length'});
 
-    imperialMeasurement.save(function (err) {
+    measurement.save(function (err) {
       should.not.exist(err);
       done();
     });
   });
 
   it('can create a measurement with weight category', function (done) {
-    metricMeasurement = new Measurement({name: 'pounds', type: 'metric', category: 'Weight'});
+    measurement = new Measurement({name: 'pounds', type: 'Metric', category: 'Weight'});
 
-    metricMeasurement.save(function (err) {
+    measurement.save(function (err) {
       should.not.exist(err);
       done();
     });
   });
 
   it('can create a measurement with volume category', function (done) {
-    metricMeasurement = new Measurement({name: 'pounds', type: 'metric', category: 'Volume'});
+    measurement = new Measurement({name: 'pounds', type: 'Metric', category: 'Volume'});
 
-    metricMeasurement.save(function (err) {
+    measurement.save(function (err) {
       should.not.exist(err);
       done();
     });
   });
 
-  after(function (done) {
-    if(imperialMeasurement !== null)
+  afterEach(function (done) {
+    if(measurement !== null)
     {
-      imperialMeasurement.remove();
-    }
-
-    if(metricMeasurement !== null) {
-      metricMeasurement.remove();
+      measurement.remove();
     }
 
     done();

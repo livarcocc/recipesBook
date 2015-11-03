@@ -3,7 +3,7 @@
 var mongoose = require('mongoose');
 
 module.exports = function () {
-  var measurementType = 'imperial metric'.split(' ');
+  var measurementType = 'Imperial Metric'.split(' ');
   var categoryType = 'Length Volume Weight'.split(' ');
 
   var measurementSchema = mongoose.Schema({
