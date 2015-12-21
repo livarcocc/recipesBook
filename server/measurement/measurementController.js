@@ -7,7 +7,10 @@ module.exports = function (Measurement) {
         res.send(collection);
       });
     },
-    measurementsWithType: function (req, res) {
+    measurementsForType: function (req, res) {
+      Measurement.find({type: req.type}).exec(function (err, collection) {
+        res.send(collection);
+      });
     }
   };
 };
