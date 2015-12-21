@@ -35,4 +35,15 @@ describe('The measurement routes', function () {
 
     done();
   });
+
+  it(
+    'maps GET "/api/measurements/type" to measurementController.measurementsWithType with a type in the request',
+    function (done) {
+      measurementRoutes(app, controller);
+
+      app.route.should.have.been.calledWith('/api/measurements/:type');
+      routeSpy.get.should.have.been.calledWith(controller.measurementsWithType);
+
+      done();
+    });
 });

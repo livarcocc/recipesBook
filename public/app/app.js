@@ -13,3 +13,5 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(function (
 
 angular.module(ApplicationConfiguration.applicationModuleName).controller('mainCtrl', function () {
 });
+
+//TODO-licavalc: consider ditching angular-route for ui-route

@@ -75,19 +75,24 @@ exports.seed = function (Measurement, next) {
   ];
 
   Measurement.find({}).exec(function (err, collection) {
-    var newMeasurements = _und.difference(measurements, collection);
-    var count = newMeasurements.length;
-    _und.each(newMeasurements, function(newMeasurement) {
-      Measurement.create(newMeasurement, function (err) {
-        if(err) {
-          console.log(err);
-        }
 
-        if(--count === 0)
-        {
-          next();
-        }
+    if(collection.length > 0)
+    {
+      next();
+    }
+    else {
+      var count = measurements.length;
+      _und.each(measurements, function (newMeasurement) {
+        Measurement.create(newMeasurement, function (err) {
+          if (err) {
+            console.log(err);
+          }
+
+          if (--count === 0) {
+            next();
+          }
+        });
       });
-    });
+    }
   });
 };

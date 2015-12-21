@@ -11,5 +11,6 @@ module.exports = function(app, controller) {
   }
 
   app.route('/api/measurements').get(controller.measurements);
+  app.route('/api/measurements/:type').get(controller.measurementsWithType);
 };
 

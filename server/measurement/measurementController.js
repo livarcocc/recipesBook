@@ -6,6 +6,8 @@ module.exports = function (Measurement) {
       Measurement.find({}).exec(function (err, collection) {
         res.send(collection);
       });
+    },
+    measurementsWithType: function (req, res) {
     }
   };
 };

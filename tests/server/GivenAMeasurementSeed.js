@@ -1,5 +1,5 @@
 describe('The measurement seed', function () {
-  it('has 16 different measurements', function (done) {
+  it('has 14 different measurements', function (done) {
     var measurementSeed = require('../../server/measurement/measurementSeed.js'),
       Measurement = require('mongoose').model('Measurement');
 
