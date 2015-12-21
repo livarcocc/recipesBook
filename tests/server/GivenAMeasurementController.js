@@ -62,7 +62,7 @@ describe('The Measurement controller', function () {
 
   describe('GET measurements for type', function () {
     it('returns a collection of measurements scoped to type', function (done) {
-      request.type = 'metric';
+      request.params = {type: 'metric'};
 
       measurementsController.measurementsForType(request, response);
 

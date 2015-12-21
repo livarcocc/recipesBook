@@ -4,7 +4,7 @@ angular.module(ApplicationConfiguration.applicationModuleName)
 
     var counter = 0;
 
-    rbMeasurement.query(
+    rbMeasurement.query({type: 'Imperial'},
       function (measurements) {
         $scope.measurements = measurements;
       },

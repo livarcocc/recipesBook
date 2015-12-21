@@ -1,3 +1,3 @@
 angular.module(ApplicationConfiguration.applicationModuleName).factory('rbMeasurement', function ($resource) {
-  return $resource('/api/measurements');
+  return $resource('/api/measurements/:type', {type: '@type'});
 });
