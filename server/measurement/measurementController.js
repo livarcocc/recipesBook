@@ -8,11 +8,7 @@ module.exports = function (Measurement) {
       });
     },
     measurementsForType: function (req, res) {
-      console.log(req);
-
       Measurement.find({type: req.params.type}).exec(function (err, collection) {
-        console.log(collection);
-
         res.send(collection);
       });
     }
