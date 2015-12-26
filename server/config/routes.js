@@ -1,12 +1,14 @@
 var path = require('path'),
     accountRoutes = require('../account/accountRoutes.js'),
     userRoutes = require('../account/userRoutes.js'),
-    measurementRoutes = require('../measurement/measurementRoutes.js');
+    measurementRoutes = require('../measurement/measurementRoutes.js'),
+    recipesBookRoutes = require('../recipesBook/recipesBookRoutes.js');
 
-module.exports = function(app) {
+module.exports = function(app, router) {
   accountRoutes(app);
   userRoutes(app);
   measurementRoutes(app);
+  recipesBookRoutes(app, router);
 
   app.get('/partials/*', function (req, res) {
     res.render(path.join('../../public/app/', req.params[0]));
