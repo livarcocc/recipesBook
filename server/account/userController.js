@@ -37,6 +37,15 @@ module.exports = function (User) {
           res.send(user);
         });
       });
+    },
+    preLoadUser: function (req, res, next, id) {
+      if(req.user._id !== id) {
+        res.status(403);
+        return res.end();
+      }
+      else {
+        return next();
+      }
     }
   };
 };

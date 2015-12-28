@@ -30,7 +30,8 @@ describe('The User controller', function () {
 
     response = {
       status: sinon.spy(),
-      send: sinon.stub()
+      send: sinon.stub(),
+      end: sinon.spy()
     };
 
     userController = require('../../server/account/userController.js')(userSpy);
@@ -154,6 +155,43 @@ describe('The User controller', function () {
       request.logIn.args[0][1]();
 
       response.send.should.have.been.calledWith(newUser);
+
+      done();
+    });
+  });
+
+  describe('pre load user', function () {
+    var next,
+      userId = 'any user id';
+
+    beforeEach(function (done) {
+      next = sinon.spy();
+
+      done();
+    });
+
+    it('returns 403 if the user in the URI does not match the signed in user', function (done) {
+      request.user  = {
+        _id: 'different user id'
+      };
+
+      userController.preLoadUser(request, response, next, userId);
+
+      response.status.should.have.been.calledWith(403);
+      response.end.should.have.been.called;
+      next.should.not.have.been.called;
+
+      done();
+    });
+
+    it('invokes the next function in the chain when the signed in user and the uri user match', function (done) {
+      request.user = {
+        _id: userId
+      };
+
+      userController.preLoadUser(request, response, next, userId);
+
+      next.should.have.been.called;
 
       done();
     });

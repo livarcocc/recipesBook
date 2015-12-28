@@ -47,8 +47,8 @@ describe('The RecipesBook routes', function () {
     };
 
     var route = sinon.stub();
-    route.withArgs('/api/recipesBooks/:recipesBook').returns(specificRecipesBooksRouteSpy);
-    route.withArgs('/api/recipesBooks').returns(recipesBooksRouteSpy);
+    route.withArgs('/api/users/:user/recipesBooks/:recipesBook').returns(specificRecipesBooksRouteSpy);
+    route.withArgs('/api/users/:user/recipesBooks').returns(recipesBooksRouteSpy);
 
     app = {
       route: route
@@ -61,7 +61,7 @@ describe('The RecipesBook routes', function () {
 
   describe('"/api/recipesBooks" routes', function () {
     it('creates a router to "/api/recipesBooks"', function (done) {
-      app.route.should.have.been.calledWith('/api/recipesBooks');
+      app.route.should.have.been.calledWith('/api/users/:user/recipesBooks');
 
       done();
     });
@@ -81,7 +81,7 @@ describe('The RecipesBook routes', function () {
 
   describe('"/api/recipesBooks/:recipesBook"', function () {
     it('creates a router to "/api/recipesBooks/:recipesBook"', function (done) {
-      app.route.should.have.been.calledWith('/api/recipesBooks/:recipesBook');
+      app.route.should.have.been.calledWith('/api/users/:user/recipesBooks/:recipesBook');
 
       done();
     });

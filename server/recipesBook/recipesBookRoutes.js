@@ -5,6 +5,8 @@ var recipesBooksController = require('./recipesBookController.js')(RecipesBooks)
 var authModule = require('../config/auth.js');
 
 module.exports = function(app, router, controller, auth) {
+  var recipesBooksRoute = '/api/users/:user/recipesBooks';
+  var specificRecipesBookRoute = recipesBooksRoute + '/:recipesBook';
 
   if(controller === undefined) {
     controller = recipesBooksController;
@@ -14,12 +16,11 @@ module.exports = function(app, router, controller, auth) {
     auth = authModule;
   }
 
-  var recipesBooksRouter = app.route('/api/recipesBooks');
+  var recipesBooksRouter = app.route(recipesBooksRoute);
 
   recipesBooksRouter.get(auth.requiresApiLogin, controller.recipesBooksForUser);
   recipesBooksRouter.post(auth.requiresApiLogin, controller.createRecipesBook);
 
-  var specificRecipesBookRoute = '/api/recipesBooks/:recipesBook';
   var specificRecipesBookRouter = app.route(specificRecipesBookRoute);
 
   specificRecipesBookRouter.put(auth.requiresApiLogin, controller.updateRecipesBook);
