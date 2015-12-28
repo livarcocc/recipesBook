@@ -1,5 +1,5 @@
 angular.module(ApplicationConfiguration.applicationModuleName)
-  .controller("rbAddOrUpdateRecipeController", function ($scope, rbRecipe, rbNotifier, $location, rbMeasurement) {
+  .controller("rbAddOrUpdateRecipeController", function ($scope, rbRecipe, rbNotifier, $location, rbMeasurement, rbRecipesBook) {
     $scope.createOrEditRecipeLegend = 'Create a new Recipe';
 
     var counter = 0;
@@ -29,11 +29,13 @@ angular.module(ApplicationConfiguration.applicationModuleName)
       }
     ];
 
-    //TODO-livar: Extract a cookbook service as well
     $scope.cookBooks = [
-      {name: "Please, select a cookbook"},
-      {id: 12, name: "Receitas de Mainha"}
+      {name: "Please, select a cookbook"}
     ];
+
+    rbRecipesBook.query(function (recipesBooks) {
+      Array.prototype.push.apply($scope.cookBooks, recipesBooks);
+    });
 
     $scope.addIngredient = function () {
       counter++;
@@ -72,6 +74,24 @@ angular.module(ApplicationConfiguration.applicationModuleName)
         _.extend(recipe, newRecipe);
         rbNotifier.success('Recipe saved!');
         $location.path('/recipes/' + recipe.id);
+      }, function (response) {
+        rbNotifier.error(response.data.reason);
+      });
+    };
+
+    $scope.saveCookBook = function () {
+      if(!$scope.newCookBookName || $scope.newCookBookName === '') {
+        rbNotifier.error('Recipes Book name is required!');
+        return;
+      }
+
+      var newCookBook = new rbRecipesBook({name: $scope.newCookBookName});
+
+      newCookBook.$save().then(function (recipesBook) {
+        _.extend(recipesBook, newCookBook);
+        $scope.cookBooks.push(recipesBook);
+        $scope.newCookBookName = ''
+        rbNotifier.success('Recipes Book saved!');
       }, function (response) {
         rbNotifier.error(response.data.reason);
       });

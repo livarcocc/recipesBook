@@ -6,9 +6,22 @@ describe('The AddOrUpdateRecipe controller', function () {
     rbRecipe,
     rbNotifier,
     rbMeasurements,
+    rbRecipesBook,
     location,
-    save,
-    saveDeferred;
+    saveNewRecipe,
+    saveNewRecipeDeffered,
+    saveNewRecipesBookDeffered,
+    saveNewRecipesBook,
+    recipesBooks = [
+      {
+        _id: 1,
+        name: 'Any name 1'
+      },
+      {
+        _id: 2,
+        name: 'Any name 2'
+      }
+    ];
 
   beforeEach(module(ApplicationConfiguration.applicationModuleName));
 
@@ -17,7 +30,7 @@ describe('The AddOrUpdateRecipe controller', function () {
       scope = $rootScope.$new();
       rbRecipe = sinon.stub();
       rbMeasurements = {
-        query: function (success) {
+        query: function (params, success) {
               success([
                 {
                   name: 'pound(s)',
@@ -27,7 +40,26 @@ describe('The AddOrUpdateRecipe controller', function () {
             }
           };
 
-      save = sinon.stub();
+      var recipesBookQueryStub = sinon.stub();
+      recipesBookQueryStub.callsArgWith(0, recipesBooks);
+
+      saveNewRecipesBookDeffered = {
+        then: function (success, error) {
+          this.success = success;
+          this.error = error;
+        }
+      };
+
+      saveNewRecipesBook = sinon.stub();
+      saveNewRecipesBook.returns(saveNewRecipesBookDeffered);
+
+      rbRecipesBook = function () {
+          this.$save= saveNewRecipesBook
+        };
+
+      rbRecipesBook.query = recipesBookQueryStub;
+
+      saveNewRecipe = sinon.stub();
       rbNotifier = {
         success: sinon.spy(),
         error: sinon.spy()
@@ -36,17 +68,17 @@ describe('The AddOrUpdateRecipe controller', function () {
         path: sinon.spy()
       };
 
-      saveDeferred = {
+      saveNewRecipeDeffered = {
         then: function (success, error) {
           this.success = success;
           this.error = error;
         }
       };
 
-      save.returns(saveDeferred);
+      saveNewRecipe.returns(saveNewRecipeDeffered);
 
       var newRecipe = {
-        $save: save
+        $save: saveNewRecipe
       };
 
       rbRecipe.returns(newRecipe);
@@ -56,7 +88,8 @@ describe('The AddOrUpdateRecipe controller', function () {
         rbRecipe: rbRecipe,
         rbNotifier: rbNotifier,
         $location: location,
-        rbMeasurement: rbMeasurements
+        rbMeasurement: rbMeasurements,
+        rbRecipesBook: rbRecipesBook
       });
     }));
 
@@ -76,6 +109,68 @@ describe('The AddOrUpdateRecipe controller', function () {
       });
 
       scope.measurements.length.should.be.at.least(1);
+    });
+  });
+
+  describe('the list of recipes books', function () {
+    it('queries the rbRecipesBook service for the list', function () {
+      rbRecipesBook.query.should.have.been.called;
+    });
+
+    it('adds the returned recipes books to $scope.cookBooks', function () {
+      scope.cookBooks.length.should.equal(3);
+    });
+
+    describe('Adding a cookbook', function () {
+      describe('$save', function () {
+        beforeEach(function () {
+          scope.newCookBookName = 'new recipe book';
+
+          scope.saveCookBook();
+        });
+
+        it('invokes $save in the rbRecipesBook service', function () {
+          saveNewRecipesBook.should.have.been.called;
+        });
+
+        it('notifies of an error when $save fails', function () {
+          var reason = 'Injected error';
+          saveNewRecipesBookDeffered.error({ data: {reason: reason}});
+
+          rbNotifier.error.should.have.been.calledWith(reason);
+        });
+
+        describe('success', function () {
+          var previousCookBooksCount;
+
+          beforeEach(function () {
+            previousCookBooksCount = scope.cookBooks.length;
+
+            saveNewRecipesBookDeffered.success({ _id: 'new id'});
+          });
+
+          it('adds the new cookbook to the list of cookbooks', function () {
+            scope.cookBooks.length.should.equal(previousCookBooksCount + 1);
+          });
+
+          it('resets the newCookBookName property to empty', function () {
+            scope.newCookBookName.should.be.empty;
+          });
+
+          it('notifies that the cook book was added successfully', function () {
+            rbNotifier.success.should.have.been.calledWith('Recipes Book saved!');
+          });
+        });
+      });
+
+      it('notifies an error if $scope.newCookBookName is not set', function () {
+        scope.newCookBookName = '';
+
+        scope.saveCookBook();
+
+        saveNewRecipesBook.should.have.not.been.called;
+        rbNotifier.error.should.have.been.calledWith('Recipes Book name is required!');
+      });
     });
   });
 
@@ -190,12 +285,12 @@ describe('The AddOrUpdateRecipe controller', function () {
       });
 
       it('calls $save on the resource', function () {
-        save.should.have.been.called;
+        saveNewRecipe.should.have.been.called;
       });
 
       describe('when successfully', function () {
         beforeEach(function () {
-          saveDeferred.success(newRecipe);
+          saveNewRecipeDeffered.success(newRecipe);
         });
 
         it('notifies that the save was successful', function () {
@@ -211,7 +306,7 @@ describe('The AddOrUpdateRecipe controller', function () {
         var failureReason = 'it is supposed to fail.';
 
         beforeEach(function () {
-          saveDeferred.error({
+          saveNewRecipeDeffered.error({
             data: {
               reason: failureReason
             }

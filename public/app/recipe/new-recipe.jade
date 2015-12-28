@@ -53,8 +53,12 @@
               ng-model="numberOfServings", required)
         .row
           .form-group.col-lg-6
-            label.control-label(for="cookBook") Cook Book
-            select.form-control(data-ng-model="cookBook", data-ng-options="cb.name for cb in cookBooks track by cb.id ", required)
+            label.control-label(for="cookBook") Recipes Book
+            select.form-control(data-ng-model="cookBook", data-ng-options="cb.name for cb in cookBooks track by cb._id ", required)
+          .form-group.col-lg-6
+            label.control-label(for="cookingTime") New Recipes Book
+            input.form-control(name="newRecipesBookName", type="text", placeholder="New recipes book name", ng-model="newCookBookName")
+            button.btn.btn-primary(ng-click="saveCookBook()") Save
         .form-group
           .col-md-10.col-md-offset-2
             .pull-right
