@@ -50,7 +50,11 @@ module.exports = function () {
     },
     roles: {
       type: String
-    }
+    },
+    recipesBooks: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'RecipesBook'
+    }]
   });
 
   accountSchema.pre('save', function (next) {
