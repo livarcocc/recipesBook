@@ -13,7 +13,11 @@ module.exports = function () {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Account',
       required: true
-    }
+    },
+    recipes: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Recipe'
+    }]
   });
 
   mongoose.model('RecipesBook', recipesBookSchema);
