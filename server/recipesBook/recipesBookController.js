@@ -2,6 +2,16 @@
 
 module.exports = function (RecipesBook) {
   return {
+    recipesBookForUser: function (req, res) {
+      req.recipesBook.populate('recipes', function (err, recipesBook) {
+        if(err) {
+          res.status(500);
+          return res.send({reason: err.toString()});
+        }
+
+        res.send(recipesBook);
+      });
+    },
     recipesBooksForUser: function (req, res) {
       RecipesBook.find({owner: req.user._id}).exec(function (err, collection) {
         res.send(collection);

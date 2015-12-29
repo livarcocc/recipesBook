@@ -79,6 +79,60 @@ describe('The RecipesBook controller', function () {
     });
   });
 
+  describe('GET Recipes Book', function () {
+    var populateProperty,
+      populateRecipesCallback;
+
+    before(function (done) {
+      request.user = {
+        _id: userId
+      };
+
+      request.recipesBook = recipesBook;
+
+      request.recipesBook.populate = function (property, callback) {
+        populateProperty = property;
+        populateRecipesCallback = callback;
+      };
+
+      done();
+    });
+
+    beforeEach(function (done) {
+      populateProperty = undefined;
+      populateRecipesCallback = undefined;
+
+      recipesBookController.recipesBookForUser(request, response);
+
+      done();
+    });
+
+    it('calls populate recipes on the Recipes Book', function (done) {
+      populateProperty.should.equal('recipes');
+
+      done();
+    });
+
+    it('sends a 500 when populate fails', function (done) {
+      var error = new Error('Injected error');
+      populateRecipesCallback(error);
+
+      response.status.should.have.been.calledWith(500);
+      response.send.should.have.been.calledWith({reason: error.toString()});
+
+      done();
+    });
+
+    it('sends the new populated recipes book back', function (done) {
+      var recipesBookToReturn = {};
+      populateRecipesCallback(undefined, recipesBookToReturn);
+
+      response.send.should.have.been.calledWith(recipesBookToReturn);
+
+      done();
+    });
+  });
+
   describe('Create recipes book', function () {
     var actualNewRecipesBook = {},
       actualCallback = function () {},
