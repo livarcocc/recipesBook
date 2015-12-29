@@ -3,12 +3,14 @@ describe('The measurement seed', function () {
     var measurementSeed = require('../../server/measurement/measurementSeed.js'),
       Measurement = require('mongoose').model('Measurement');
 
-    measurementSeed.seed(Measurement, function () {
-      Measurement.find({}).exec(function (err, collection) {
-        collection.length.should.equal(14);
-      });
+    Measurement.find({}).remove(function () {
+      measurementSeed.seed(Measurement, function () {
+        Measurement.find({}).exec(function (err, collection) {
+          collection.length.should.equal(14);
+        });
 
-      done();
+        done();
+      });
     });
   });
 

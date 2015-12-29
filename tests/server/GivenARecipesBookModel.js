@@ -21,7 +21,7 @@ describe('The RecipesBook model', function () {
     Account = mongoose.model('Account');
 
     Account.findOne({userName: accountParams.userName}, function (err, account) {
-      if(err || account === undefined)
+      if(err || !account)
       {
         existingAccount = new Account(accountParams);
 
