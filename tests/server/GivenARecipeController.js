@@ -39,7 +39,8 @@ describe('The Recipe controller', function () {
 
   describe('Create recipe', function () {
     var actualNewRecipe,
-      createRecipeCallback;
+      createRecipeCallback,
+      recipesBook;
 
     beforeEach(function (done) {
       createRecipeCallback = function () {};
@@ -47,6 +48,13 @@ describe('The Recipe controller', function () {
       request.body = {
         name: 'recipes book'
       };
+
+      recipesBook = {
+        save: sinon.spy(),
+        recipes: []
+      };
+
+      request.recipesBook = recipesBook;
 
       recipeSpy.create = function (newRecipe, callback) {
         actualNewRecipe = newRecipe;
@@ -67,14 +75,58 @@ describe('The Recipe controller', function () {
       done();
     });
 
-    it('sends the recipe back in the response when the creation succeeds', function (done) {
-      var newRecipe = {};
+    describe('Adding the recipe to the recipes book', function () {
+      var newRecipe;
 
-      createRecipeCallback(undefined, newRecipe);
+      beforeEach(function () {
+        newRecipe = {};
+        createRecipeCallback(undefined, newRecipe);
+      });
 
-      response.send.should.have.been.calledWith(newRecipe);
+      it('adds the recipe to the recipes book', function (done) {
+        recipesBook.recipes.length.should.equal(1);
+        recipesBook.recipes[0].should.equal(newRecipe);
 
-      done();
+        done();
+      });
+
+      it('saves the recipes book', function (done) {
+        recipesBook.save.should.have.been.called;
+
+        done();
+      });
+
+      describe('the save recipes book callback', function () {
+        var saveRecipesBookCallback;
+
+        beforeEach(function (done) {
+          recipesBook.save = function (callback) {
+            saveRecipesBookCallback = callback;
+          };
+
+          createRecipeCallback(undefined, newRecipe);
+
+          done();
+        });
+
+        it('sends a 500 when it fails to save the recipes book', function (done) {
+          var error = new Error('Injected error.');
+          saveRecipesBookCallback(error);
+
+          response.status.should.have.been.calledWith(500);
+          response.send.should.have.been.calledWith({reason: error.toString()});
+
+          done();
+        });
+
+        it('sends the recipe back after saving the recipes book', function (done) {
+          saveRecipesBookCallback();
+
+          response.send.should.have.been.calledWith(newRecipe);
+
+          done();
+        });
+      });
     });
   });
 

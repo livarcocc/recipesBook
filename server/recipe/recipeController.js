@@ -11,7 +11,15 @@ module.exports = function (Recipe) {
           return res.send({reason: err.toString()});
         }
 
-        res.send(recipe);
+        req.recipesBook.recipes.push(recipe);
+        req.recipesBook.save(function (err) {
+          if(err) {
+            res.status(500);
+            return res.send({reason: err.toString()});
+          }
+
+          res.send(recipe);
+        });
       });
     },
     preLoadRecipe: function (req, res, next, id) {
