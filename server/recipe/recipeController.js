@@ -13,6 +13,23 @@ module.exports = function (Recipe) {
 
         res.send(recipe);
       });
+    },
+    preLoadRecipe: function (req, res, next, id) {
+      Recipe.findById(id, function (err, recipe) {
+        if(err) {
+          res.status(500);
+          return res.send({reason: err.toString()});
+        }
+
+        if(!recipe || recipe.recipesBook !== req.recipesBook._id) {
+          res.status(404);
+          return res.send({reason: 'Can\'t find recipe.'})
+        }
+
+        req.recipe = recipe;
+
+        return next();
+      });
     }
   }
 };

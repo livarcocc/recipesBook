@@ -14,7 +14,7 @@ describe('The Recipe controller', function () {
     response,
     recipeController;
 
-  before(function (done) {
+  var prepareRequestResponse = function () {
     request = {
     };
 
@@ -23,8 +23,16 @@ describe('The Recipe controller', function () {
       send: sinon.stub(),
       end: sinon.spy()
     };
+  };
 
+  before(function (done) {
     recipeController = require('../../server/recipe/recipeController.js')(recipeSpy);
+
+    done();
+  });
+
+  beforeEach(function (done) {
+    prepareRequestResponse();
 
     done();
   });
@@ -65,6 +73,85 @@ describe('The Recipe controller', function () {
       createRecipeCallback(undefined, newRecipe);
 
       response.send.should.have.been.calledWith(newRecipe);
+
+      done();
+    });
+  });
+
+  describe('the pre-load recipe function', function () {
+    var next,
+      findByIdId,
+      findByIdCallback,
+      recipeId = 'some recipe id',
+      recipesBookId = 'some recipes book id',
+      recipe = {
+        recipesBook: recipesBookId
+      };
+
+    beforeEach(function (done) {
+      next = sinon.spy();
+
+      recipeSpy.findById = function (id, callback) {
+        findByIdId = id;
+
+        findByIdCallback = callback;
+      };
+
+      request.recipesBook = {
+        _id: recipesBookId
+      };
+
+      recipeController.preLoadRecipe(request, response, next, recipeId);
+
+      done();
+    });
+
+    it('tries to find a recipe with the passed id', function (done) {
+      findByIdId.should.equal(recipeId);
+
+      done();
+    });
+
+    it('sets req.recipe to the recipe with the passed id', function (done) {
+      findByIdCallback(undefined, recipe);
+
+      request.recipe.should.equal(recipe);
+
+      done();
+    });
+
+    it('returns 404 when no recipe is found for the passed id', function (done) {
+      findByIdCallback(undefined, undefined);
+
+      response.status.should.have.been.calledWith(404);
+      response.send.should.have.been.calledWith({reason: 'Can\'t find recipe.'});
+
+      done();
+    });
+
+    it('returns 404 if the recipe does not belong to the recipe book in the uri', function (done) {
+      findByIdCallback(undefined, {recipesBook: 'a different recipes book id'});
+
+      response.status.should.have.been.calledWith(404);
+      response.send.should.have.been.calledWith({reason: 'Can\'t find recipe.'});
+
+      done();
+    });
+
+    it('returns 500 when a error occurs when trying to find the recipe', function (done) {
+      var error = new Error('Injected error');
+      findByIdCallback(error, undefined);
+
+      response.status.should.have.been.calledWith(500);
+      response.send.should.have.been.calledWith({reason: error.toString()});
+
+      done();
+    });
+
+    it('invokes the next function in the chain when everything succeeds', function (done) {
+      findByIdCallback(undefined, recipe);
+
+      next.should.have.been.called;
 
       done();
     });
