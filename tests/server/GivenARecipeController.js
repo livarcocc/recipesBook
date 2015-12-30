@@ -37,6 +37,52 @@ describe('The Recipe controller', function () {
     done();
   });
 
+  describe('GET Recipe', function () {
+    var populateProperty,
+      populateRecipeCallback;
+
+    beforeEach(function (done) {
+      request.recipe = {
+        populate: function (property, callback) {
+          populateProperty = property;
+          populateRecipeCallback = callback;
+        }
+      };
+
+      populateProperty = undefined;
+      populateRecipeCallback = undefined;
+
+      recipeController.recipeForUser(request, response);
+
+      done();
+    });
+
+    it('calls populate ingredients.measurement on the Recipe', function (done) {
+      populateProperty.should.equal('ingredients.measurement');
+
+      done();
+    });
+
+    it('sends a 500 when populate fails', function (done) {
+      var error = new Error('Injected error');
+      populateRecipeCallback(error);
+
+      response.status.should.have.been.calledWith(500);
+      response.send.should.have.been.calledWith({reason: error.toString()});
+
+      done();
+    });
+
+    it('sends the new populated recipe back', function (done) {
+      var recipeToReturn = {};
+      populateRecipeCallback(undefined, recipeToReturn);
+
+      response.send.should.have.been.calledWith(recipeToReturn);
+
+      done();
+    });
+  });
+
   describe('Create recipe', function () {
     var actualNewRecipe,
       createRecipeCallback,

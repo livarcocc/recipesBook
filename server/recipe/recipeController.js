@@ -2,6 +2,16 @@
 
 module.exports = function (Recipe) {
   return {
+    recipeForUser: function (req, res) {
+      req.recipe.populate('ingredients.measurement', function (err, recipe) {
+        if(err) {
+          res.status(500);
+          return res.send({reason: err.toString()});
+        }
+
+        res.send(recipe);
+      });
+    },
     createRecipe: function(req, res) {
       var newRecipe = req.body;
 
