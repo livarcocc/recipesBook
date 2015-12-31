@@ -59,7 +59,7 @@ describe('The RecipesBook routes', function () {
     done();
   });
 
-  describe('"/api/recipesBooks" routes', function () {
+  describe('"/api/users/:user/recipesBooks" routes', function () {
     it('creates a router to "/api/recipesBooks"', function (done) {
       app.route.should.have.been.calledWith('/api/users/:user/recipesBooks');
 
@@ -79,7 +79,7 @@ describe('The RecipesBook routes', function () {
     });
   });
 
-  describe('"/api/recipesBooks/:recipesBook"', function () {
+  describe('"/api/users/:user/recipesBooks/:recipesBook"', function () {
     it('creates a router to "/api/recipesBooks/:recipesBook"', function (done) {
       app.route.should.have.been.calledWith('/api/users/:user/recipesBooks/:recipesBook');
 
@@ -102,6 +102,6 @@ describe('The RecipesBook routes', function () {
       router.param.should.have.been.calledWith('recipesBook', controller.preLoadRecipesBook);
 
       done();
-    })
+    });
   });
 });
