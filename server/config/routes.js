@@ -5,12 +5,12 @@ var path = require('path'),
     recipesBookRoutes = require('../recipesBook/recipesBookRoutes.js'),
     recipeRoutes = require('../recipe/recipeRoutes.js');
 
-module.exports = function(app, router) {
+module.exports = function(app) {
   accountRoutes(app);
   userRoutes(app);
   measurementRoutes(app);
-  recipesBookRoutes(app, router);
-  recipeRoutes(app, router);
+  recipesBookRoutes(app);
+  recipeRoutes(app);
 
   app.use(router);
 
