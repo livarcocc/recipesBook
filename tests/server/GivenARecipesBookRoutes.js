@@ -12,7 +12,6 @@ describe('The RecipesBook routes', function () {
     recipesBooksRouteSpy,
     specificRecipesBooksRouteSpy,
     auth,
-    router,
     app,
     controller = {
       recipesBooksForUser: function () {},
@@ -42,19 +41,16 @@ describe('The RecipesBook routes', function () {
       requiresApiLogin: sinon.spy()
     };
 
-    router = {
-      param: sinon.spy()
-    };
-
     var route = sinon.stub();
     route.withArgs('/api/users/:user/recipesBooks/:recipesBook').returns(specificRecipesBooksRouteSpy);
     route.withArgs('/api/users/:user/recipesBooks').returns(recipesBooksRouteSpy);
 
     app = {
-      route: route
+      route: route,
+      param: sinon.spy()
     };
 
-    recipesBooksRoutes(app, router, controller, auth);
+    recipesBooksRoutes(app, controller, auth);
 
     done();
   });
@@ -99,7 +95,7 @@ describe('The RecipesBook routes', function () {
     });
 
     it('adds a param to :recipesBook which calls to recipesBookController.preLoadRecipesBook', function (done) {
-      router.param.should.have.been.calledWith('recipesBook', controller.preLoadRecipesBook);
+      app.param.should.have.been.calledWith('recipesBook', controller.preLoadRecipesBook);
 
       done();
     });

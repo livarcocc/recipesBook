@@ -241,24 +241,31 @@ describe('The AddOrUpdateRecipe controller', function () {
     describe('Adding a recipe', function () {
       var name = 'recipeName',
         description = 'recipeDescription',
+        ingredients,
+        directions = 'recipeDirections',
+        preparationTime = '15 minutes',
+        cookingTime = '30 minutes',
+        numberOfServings = 4,
+        cookbook = {
+          _id: 1
+        },
+        newRecipeId = 22,
+        newRecipe = {
+          _id: newRecipeId
+        };
+
+      beforeEach(function () {
         ingredients = [{
           id: 0,
           name: 'ingredient',
           preparation: 'chopped',
           quantity: 10,
-          unity: 'pound(s)'
-        }],
-        directions = 'recipeDirections',
-        preparationTime = '15 minutes',
-        cookingTime = '30 minutes',
-        numberOfServings = 4,
-        cookbook = 1,
-        newRecipeId = 22,
-        newRecipe = {
-          id: newRecipeId
-        };
+          measurement: {
+            name: 'pound(s)',
+            _id: 'measurement id1'
+          }
+        }];
 
-      beforeEach(function () {
         scope.name = name;
         scope.description = description;
         scope.ingredients = ingredients;
@@ -266,7 +273,7 @@ describe('The AddOrUpdateRecipe controller', function () {
         scope.preparationTime = preparationTime;
         scope.cookingTime = cookingTime;
         scope.numberOfServings = numberOfServings;
-        scope.cookbook = cookbook;
+        scope.cookBook = cookbook;
 
         scope.saveRecipe();
       });
@@ -280,7 +287,7 @@ describe('The AddOrUpdateRecipe controller', function () {
           preparationTime: preparationTime,
           cookingTime: cookingTime,
           numberOfServings: numberOfServings,
-          cookbook: cookbook
+          recipesBook: cookbook._id
         });
       });
 

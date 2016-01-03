@@ -9,10 +9,18 @@ chai.should();
 chai.use(sinonChai);
 
 describe('The RecipesBook controller', function () {
-  var recipesBooksCollection = ['user1', 'user2'],
+  var TestUser = function (id) {
+      return {
+        _id: id,
+        equals: function (otherUser) {
+          return otherUser === this._id;
+        }
+      }
+    },
+    recipesBooksCollection = ['user1', 'user2'],
     userId = 'anyUserId',
     recipesBookId = 'recipesBookId',
-    recipesBook = {_id: recipesBookId, name: 'any name', owner: userId},
+    recipesBook = {_id: recipesBookId, name: 'any name', owner: new TestUser(userId)},
     recipesBookController,
     findByIdId,
     findByIdCallback,
@@ -55,9 +63,7 @@ describe('The RecipesBook controller', function () {
 
   describe('GET Recipes Books', function () {
     it('returns all recipe books for a user', function (done) {
-      request.user = {
-        _id: userId
-      };
+      request.user = new TestUser(userId);
 
       recipesBookController.recipesBooksForUser(request, response);
 
@@ -138,7 +144,7 @@ describe('The RecipesBook controller', function () {
       actualCallback = function () {},
       newRecipesBook = {
         name: 'new recipes book',
-        owner: userId
+        owner: new TestUser(userId)
       };
 
     beforeEach(function (done) {
@@ -214,8 +220,6 @@ describe('The RecipesBook controller', function () {
 
       done();
     });
-
-//    add validation that the signed-in user matches the uri user, should probably happen in the auth module
 
     it('sends a 400 when body.name is not set', function (done) {
       recipesBookController.updateRecipesBook({}, response);
@@ -321,9 +325,7 @@ describe('The RecipesBook controller', function () {
     beforeEach(function (done) {
       next = sinon.spy();
 
-      request.user = {
-        _id: userId
-      };
+      request.user = new TestUser(userId);
 
       recipesBookController.preLoadRecipesBook(request, response, next, recipesBookId);
 
@@ -372,9 +374,7 @@ describe('The RecipesBook controller', function () {
     });
 
     it('throws 403 if the user in the URI is not the owner of the recipes book', function (done) {
-      request.user = {
-        _id: 'some other id'
-      };
+      request.user = new TestUser('some other id');
 
       findByIdCallback(undefined, recipesBook);
 

@@ -47,10 +47,11 @@ describe('The recipe routes', function () {
     route.withArgs('/api/users/:user/recipesBooks/:recipesBook/recipes/:recipe').returns(specificRecipeRouteSpy);
 
     app = {
-      route: route
+      route: route,
+      param: sinon.spy()
     };
 
-    recipeRoutes(app, router, auth, controller);
+    recipeRoutes(app, auth, controller);
 
     done();
   });
@@ -83,7 +84,7 @@ describe('The recipe routes', function () {
     });
 
     it('adds a param to :recipe which calls to recipeController.preLoadRecipe', function (done) {
-      router.param.should.have.been.calledWith('recipe', controller.preLoadRecipe);
+      app.param.should.have.been.calledWith('recipe', controller.preLoadRecipe);
 
       done();
     })

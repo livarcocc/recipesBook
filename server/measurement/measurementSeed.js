@@ -1,5 +1,6 @@
 var _und = require('underscore');
 
+//TODO-licavalc: missing spon measurements and cup measurements
 exports.seed = function (Measurement, next) {
   var measurements = [
     {
@@ -41,6 +42,11 @@ exports.seed = function (Measurement, next) {
       name: 'pound (lb)',
       type: 'Imperial',
       category: 'Weight'
+    },
+    {
+      name: 'unit',
+      type: 'Imperial',
+      category: 'Length'
     },
     {
       name: 'centimetre (cm)',

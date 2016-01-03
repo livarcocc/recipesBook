@@ -42,7 +42,7 @@ angular.module(ApplicationConfiguration.applicationModuleName)
       $scope.ingredients.push({
         id: counter,
         quantity: "",
-        unit: "pound(s)",
+        measurement: {},
         name: "",
         preparation: ""
       });
@@ -62,18 +62,21 @@ angular.module(ApplicationConfiguration.applicationModuleName)
       var newRecipe = new rbRecipe({
         name: $scope.name,
         description: $scope.description,
-        ingredients: $scope.ingredients,
+        ingredients: _.map($scope.ingredients, function (ingredient) {
+          ingredient.measurement = ingredient.measurement._id;
+          return ingredient;
+        }),
         directions: $scope.directions,
         preparationTime: $scope.preparationTime,
         cookingTime: $scope.cookingTime,
         numberOfServings: $scope.numberOfServings,
-        cookbook: $scope.cookbook
+        recipesBook: $scope.cookBook._id
       });
 
       newRecipe.$save().then(function (recipe) {
         _.extend(recipe, newRecipe);
         rbNotifier.success('Recipe saved!');
-        $location.path('/recipes/' + recipe.id);
+        $location.path('/recipes/' + recipe._id);
       }, function (response) {
         rbNotifier.error(response.data.reason);
       });

@@ -76,7 +76,7 @@ module.exports = function (RecipesBook) {
           return res.send({reason: 'Can\'t find recipes book.'});
         }
 
-        if(recipesBook.owner !== req.user._id)
+        if(!recipesBook.owner.equals(req.user._id))
         {
           res.status(403);
           return res.end();
