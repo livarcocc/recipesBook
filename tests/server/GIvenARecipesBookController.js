@@ -24,9 +24,24 @@ describe('The RecipesBook controller', function () {
     recipesBookController,
     findByIdId,
     findByIdCallback,
+    populate,
+    recipesBookSpy,
+    request,
+    response;
+
+  beforeEach(function (done) {
+    request = {
+    };
+
+    response = {
+      status: sinon.spy(),
+      send: sinon.stub(),
+      end: sinon.spy()
+    };
+
     recipesBookSpy = {
       find: function(conditional) {
-        return {
+        populate = sinon.stub().returns({
           exec: function (callback) {
             if(conditional.owner === userId) {
               callback(undefined, recipesBooksCollection);
@@ -35,6 +50,10 @@ describe('The RecipesBook controller', function () {
               callback(undefined, []);
             }
           }
+        });
+
+        return {
+          populate: populate
         }
       },
       findById: function (id, callback) {
@@ -42,18 +61,6 @@ describe('The RecipesBook controller', function () {
 
         findByIdCallback = callback;
       }
-    },
-    request,
-    response;
-
-  before(function (done) {
-    request = {
-    };
-
-    response = {
-      status: sinon.spy(),
-      send: sinon.stub(),
-      end: sinon.spy()
     };
 
     recipesBookController = require('../../server/recipesBook/recipesBookController.js')(recipesBookSpy);
@@ -68,6 +75,12 @@ describe('The RecipesBook controller', function () {
       recipesBookController.recipesBooksForUser(request, response);
 
       response.send.should.have.been.calledWith(recipesBooksCollection);
+
+      done();
+    });
+
+    it('populates the recipes _id and name of the recipes books', function (done) {
+      populate.should.have.been.calledWith('recipes', '_id name');
 
       done();
     });
@@ -94,6 +107,10 @@ describe('The RecipesBook controller', function () {
         _id: userId
       };
 
+      done();
+    });
+
+    beforeEach(function (done) {
       request.recipesBook = recipesBook;
 
       request.recipesBook.populate = function (property, callback) {
@@ -101,10 +118,6 @@ describe('The RecipesBook controller', function () {
         populateRecipesCallback = callback;
       };
 
-      done();
-    });
-
-    beforeEach(function (done) {
       populateProperty = undefined;
       populateRecipesCallback = undefined;
 

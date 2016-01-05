@@ -13,7 +13,7 @@ module.exports = function (RecipesBook) {
       });
     },
     recipesBooksForUser: function (req, res) {
-      RecipesBook.find({owner: req.user._id}).exec(function (err, collection) {
+      RecipesBook.find({owner: req.user._id}).populate('recipes', '_id name').exec(function (err, collection) {
         res.send(collection);
       });
     },
