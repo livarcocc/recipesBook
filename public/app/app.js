@@ -8,7 +8,8 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(function (
     .when('/', {templateUrl: '/partials/main/main', controller: 'mainCtrl'})
     .when('/login', {templateUrl: '/partials/account/login', controller: 'rbLoginController'})
     .when('/signup', {templateUrl: '/partials/account/signup', controller: 'rbSignUpController'})
-    .when('/newRecipe', {templateUrl: '/partials/recipe/new-recipe', controller: 'rbAddOrUpdateRecipeController'});
+    .when('/newRecipe', {templateUrl: '/partials/recipe/new-recipe', controller: 'rbAddOrUpdateRecipeController'})
+    .when('/recipesBooks', {templateUrl: '/partials/recipesBook/list-recipes-books', controller: 'rbRecipesBooksController'});
 });
 
 angular.module(ApplicationConfiguration.applicationModuleName).controller('mainCtrl', function () {

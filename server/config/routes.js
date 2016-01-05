@@ -12,8 +12,6 @@ module.exports = function(app) {
   recipesBookRoutes(app);
   recipeRoutes(app);
 
-  app.use(router);
-
   app.get('/partials/*', function (req, res) {
     res.render(path.join('../../public/app/', req.params[0]));
   });

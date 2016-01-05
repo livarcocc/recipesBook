@@ -1,0 +1,10 @@
+.container
+  .well
+    table.table.table-striped
+      thead
+        td
+          h2 Recipes Books
+      tr(ng-repeat="recipesBook in recipesBooks")
+        td
+          h4
+            a(href="#/recipesBooks/{{recipesBook._id}}") {{recipesBook.name}}
