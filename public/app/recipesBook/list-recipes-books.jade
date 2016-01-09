@@ -1,10 +1,13 @@
 .container
   .well
-    table.table.table-striped
-      thead
-        td
-          h2 Recipes Books
-      tr(ng-repeat="recipesBook in recipesBooks")
-        td
-          h4
-            a(href="#/recipesBooks/{{recipesBook._id}}") {{recipesBook.name}}
+    .page-header
+      h2 Recipes Books
+    .panel.panel-default.recipes-book(ng-repeat="recipesBook in recipesBooks")
+      .panel-heading
+        h4
+          a(href="#/recipesBooks/{{recipesBook._id}}") {{recipesBook.name}}
+        .label.label-info {{recipesBook.recipes.length}} Recipes
+      .panel-body
+        ul.list-inline
+          li.col-xs-2.recipe(ng-repeat="recipe in recipesBook.recipes | limitTo: 5 as result")
+            a(href="#/recipesBooks/{{recipesBook._id}}/recipes/{{recipe._id}}") {{recipe.name}}
