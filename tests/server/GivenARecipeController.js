@@ -182,8 +182,16 @@ describe('The Recipe controller', function () {
       findByIdCallback,
       recipeId = 'some recipe id',
       recipesBookId = 'some recipes book id',
+      RecipesBook = function (id) {
+        return {
+          _id: id,
+          equals: function (otherRecipeBook) {
+            return this._id === otherRecipeBook;
+          }
+        };
+      },
       recipe = {
-        recipesBook: recipesBookId
+        recipesBook: new RecipesBook(recipesBookId)
       };
 
     beforeEach(function (done) {
@@ -195,9 +203,7 @@ describe('The Recipe controller', function () {
         findByIdCallback = callback;
       };
 
-      request.recipesBook = {
-        _id: recipesBookId
-      };
+      request.recipesBook = new RecipesBook(recipesBookId);
 
       recipeController.preLoadRecipe(request, response, next, recipeId);
 
@@ -228,7 +234,7 @@ describe('The Recipe controller', function () {
     });
 
     it('returns 404 if the recipe does not belong to the recipe book in the uri', function (done) {
-      findByIdCallback(undefined, {recipesBook: 'a different recipes book id'});
+      findByIdCallback(undefined, {recipesBook: new RecipesBook('a different recipes book id')});
 
       response.status.should.have.been.calledWith(404);
       response.send.should.have.been.calledWith({reason: 'Can\'t find recipe.'});

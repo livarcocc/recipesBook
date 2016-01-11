@@ -39,7 +39,7 @@ module.exports = function (Recipe) {
           return res.send({reason: err.toString()});
         }
 
-        if(!recipe || recipe.recipesBook !== req.recipesBook._id) {
+        if(!recipe || !recipe.recipesBook.equals(req.recipesBook._id)) {
           res.status(404);
           return res.send({reason: 'Can\'t find recipe.'})
         }
