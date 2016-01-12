@@ -13,7 +13,7 @@ There is no no-color option ("less --help" for help)
   font-weight: @badge-font-weight;
   color: @badge-color;
   line-height: @badge-line-height;
-  vertical-align: baseline;
+  vertical-align: middle;
   white-space: nowrap;
   text-align: center;
   background-color: @badge-bg;
@@ -29,7 +29,9 @@ There is no no-color option ("less --help" for help)
     position: relative;
     top: -1px;
   }
-  .btn-xs & {
+
+  .btn-xs &,
+  .btn-group-xs > .btn & {
     top: 0;
     padding: 1px 5px;
   }
@@ -50,12 +52,15 @@ There is no no-color option ("less --help" for help)
     color: @badge-active-color;
     background-color: @badge-active-bg;
   }
+
   .list-group-item > & {
     float: right;
   }
+
   .list-group-item > & + & {
     margin-right: 5px;
   }
+
   .nav-pills > li > a > & {
     margin-left: 3px;
   }

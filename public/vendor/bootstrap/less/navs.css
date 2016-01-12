@@ -224,11 +224,9 @@ There is no no-color option ("less --help" for help)
 .tab-content {
   > .tab-pane {
     display: none;
-    visibility: hidden;
   }
   > .active {
     display: block;
-    visibility: visible;
   }
 }
 

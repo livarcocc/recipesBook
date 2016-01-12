@@ -39,12 +39,14 @@ describe('The Recipe controller', function () {
 
   describe('GET Recipe', function () {
     var populateProperty,
+      populateFields,
       populateRecipeCallback;
 
     beforeEach(function (done) {
       request.recipe = {
-        populate: function (property, callback) {
+        populate: function (property, fields, callback) {
           populateProperty = property;
+          populateFields = fields;
           populateRecipeCallback = callback;
         }
       };
@@ -58,7 +60,13 @@ describe('The Recipe controller', function () {
     });
 
     it('calls populate ingredients.measurement on the Recipe', function (done) {
-      populateProperty.should.equal('ingredients.measurement');
+      populateProperty.should.equal('ingredients.measurement recipesBook');
+
+      done();
+    });
+
+    it('calls populate name field on the Recipe', function (done) {
+      populateFields.should.equal('name');
 
       done();
     });

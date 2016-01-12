@@ -45,7 +45,6 @@ There is no no-color option ("less --help" for help)
 
 .hidden {
   display: none !important;
-  visibility: hidden !important;
 }
 
 

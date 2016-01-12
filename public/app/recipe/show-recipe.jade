@@ -1,4 +1,45 @@
 .container
-  .well
+  .well.recipe
     .page-header
+      h1
+        a(href="#/recipesBooks/{{recipe.recipesBook._id}}") {{recipe.recipesBook.name}}
       h2 {{recipe.name}}
+      p {{recipe.description}}
+    .panel.panel-default.panel-recipe
+      .panel-heading
+        .container
+          .row
+            .col-lg-2
+              h4 Ingredients
+      .panel-body
+        .row
+          .col-lg-5
+            ul
+              li(ng-repeat="ingredient in recipe.ingredients | limitTo: splitIngredients")
+                span {{ingredient.quantity}} {{ingredient.measurement.name}} of {{ingredient.name}}
+                span(ng-show="ingredient.preparation !== undefined && ingredient.preparation != ''"), {{ingredient.preparation}}
+          .col-lg-5
+            ul
+              li(ng-repeat="ingredient in recipe.ingredients | limitTo:splitIngredients:splitIngredients")
+                span {{ingredient.quantity}} {{ingredient.measurement.name}} of {{ingredient.name}}
+                span(ng-show="ingredient.preparation !== undefined && ingredient.preparation != ''"), {{ingredient.preparation}}
+    .panel.panel-default.panel-recipe
+      .panel-heading
+        .container
+          .row
+            .col-lg-2
+              h4 Directions
+            .col-lg-3.col-lg-offset-6
+              .container
+                .row.recipe-prep-info-group
+                  .col-xs-1.recipe-info
+                    p.text-info Preparation
+                    time {{recipe.preparationTime}}
+                  .col-xs-1.recipe-info
+                    p.text-info Cooking
+                    time {{recipe.cookingTime}}
+                  .col-xs-1.recipe-info
+                    p.text-info Servings
+                    time {{recipe.numberOfServings}}
+      .panel-body
+        p.lead {{recipe.directions}}

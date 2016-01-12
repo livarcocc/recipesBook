@@ -6,7 +6,8 @@ There is no no-color option ("less --help" for help)
     color: @color;
     background-color: @background;
 
-    a& {
+    a&,
+    button& {
       color: @color;
 
       .list-group-item-heading {
