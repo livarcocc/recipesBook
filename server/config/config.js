@@ -3,6 +3,8 @@ var path = require('path');
 var rootPath = path.normalize(__dirname + '/../../');
 var port = process.env.PORT || 3000;
 
+var productionDB = process.env.DB;
+
 module.exports = {
   development: {
     db: 'mongodb://localhost/recipesBook-dev',
@@ -15,7 +17,7 @@ module.exports = {
     port: port
   },
   production: {
-    db: 'mongodb://licavalc:<dbpassword>@ds027751.mongolab.com:27751/recipesbook',
+    db: productionDB,
     rootPath: rootPath,
     port: port
   }
