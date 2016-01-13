@@ -11,8 +11,8 @@
     "test": "node_modules/mocha/bin/mocha ./tests/server"
   },
   "engines": {
-    "node": "0.10.x",
-    "npm": "1.4.x"
+    "node": "4.1.1",
+    "npm": "2.14.4"
   },
   "author": "Livar Cunha (livar@live.com)",
   "license": "ISC",

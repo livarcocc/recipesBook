@@ -1,6 +1,8 @@
 var express = require('express'),
   http = require('http');
 
+console.log('============ Starting up the app ===========');
+
 var app = express();
 
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
