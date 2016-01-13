@@ -59,12 +59,15 @@ angular.module(ApplicationConfiguration.applicationModuleName)
     };
 
     $scope.saveRecipe = function () {
+      var filteredIngredients = $scope.ingredients.filter(function(ingredient) {
+        return typeof ingredient.measurement != 'undefined';
+      });
+
       var newRecipe = new rbRecipe({
         name: $scope.name,
         description: $scope.description,
-        ingredients: _.map($scope.ingredients, function (ingredient) {
+        ingredients: _.map(filteredIngredients, function (ingredient) {
           ingredient.measurement = ingredient.measurement._id;
-          return ingredient;
         }),
         directions: $scope.directions,
         preparationTime: $scope.preparationTime,
